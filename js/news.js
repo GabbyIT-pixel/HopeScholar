@@ -32,8 +32,8 @@ const News = {
       return;
     }
 
-    const feed = 'https://feeds.bbci.co.uk/news/education/rss.xml';
-    const url  = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&count=30`;
+    const feed = 'https://www.theguardian.com/education/rss';
+    const url  = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&api_key=public&count=20`;
 
     try {
       const res  = await fetchWithTimeout(url);
