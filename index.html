@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="HopeScholar — Connecting talented African students from poor communities to fully funded scholarships and universities worldwide."/>
+  <title>HopeScholar — Fully Funded Education for Every African Student</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ══ SIDEBAR ══════════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-brand">
+      <div class="brand-mark">HS</div>
+      <div class="brand-text">
+        <span class="brand-name">HopeScholar</span>
+        <span class="brand-sub">Free Education for All</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <p class="nav-label">Discover</p>
+      <button class="nav-btn active" data-tab="scholarships" aria-current="page">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M2 17l10 6 10-6"/><path d="M2 13l10 6 10-6"/>
+        </svg>
+        Scholarships
+      </button>
+      <button class="nav-btn" data-tab="universities">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+        </svg>
+        Universities
+      </button>
+      <button class="nav-btn" data-tab="countries">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        Countries
+      </button>
+      <button class="nav-btn" data-tab="news">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/>
+          <path d="M18 14H10M15 18H10M10 10h4"/>
+        </svg>
+        Opportunities
+      </button>
+      <p class="nav-label" style="margin-top:14px">My Space</p>
+      <button class="nav-btn" data-tab="saved">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+        </svg>
+        Saved
+        <span class="nav-pill" id="saved-badge" aria-label="saved count" style="display:none">0</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-profile">
+      <div class="profile-av" aria-hidden="true">GM</div>
+      <div class="profile-info">
+        <span class="profile-name">Gabriel Mugisha</span>
+        <span class="profile-role">ALU · Software Engineering</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MOBILE TOPBAR ════════════════════════════════════════ -->
+  <header class="topbar" role="banner">
+    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="topbar-title">HopeScholar</span>
+    <div style="width:40px"></div>
+  </header>
+  <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+
+  <!-- ══ MAIN ═════════════════════════════════════════════════ -->
+  <main class="main" id="main-content">
+
+    <!-- ── SCHOLARSHIPS ───────────────────────────────────────── -->
+    <section class="panel active" id="tab-scholarships" aria-label="Scholarships">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Scholarships</h1>
+          <p class="panel-desc">Fully funded — zero cost. Visit each website to apply.</p>
+        </div>
+        <span class="header-badge" id="schol-total"></span>
+      </div>
+
+      <div class="filter-card">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="schol-search" placeholder="Search scholarships, universities, countries…" autocomplete="off" aria-label="Search scholarships" maxlength="100"/>
+        </div>
+        <div class="filter-row">
+          <div class="field-grp">
+            <label class="field-lbl" for="schol-cat">Category</label>
+            <div class="sel-wrap">
+              <select id="schol-cat" aria-label="Filter by category">
+                <option value="">All Categories</option>
+                <option value="mastercard">Mastercard Foundation</option>
+                <option value="fullyfunded">Fully Funded</option>
+                <option value="global">Global Scholarships</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="field-grp">
+            <label class="field-lbl" for="schol-region">Region</label>
+            <div class="sel-wrap">
+              <select id="schol-region" aria-label="Filter by region">
+                <option value="">All Regions</option>
+                <option value="africa">Africa</option>
+                <option value="usa">USA</option>
+                <option value="uk">United Kingdom</option>
+                <option value="europe">Europe</option>
+                <option value="canada">Canada</option>
+                <option value="other">Other</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="field-grp">
+            <label class="field-lbl" for="schol-sort">Sort</label>
+            <div class="sel-wrap">
+              <select id="schol-sort" aria-label="Sort scholarships">
+                <option value="name-asc">Name A → Z</option>
+                <option value="name-desc">Name Z → A</option>
+                <option value="country">By Country</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="schol-stats" class="results-bar" aria-live="polite" style="display:none"></div>
+      <div id="schol-grid" class="card-grid" role="list"></div>
+    </section>
+
+    <!-- ── UNIVERSITIES ───────────────────────────────────────── -->
+    <section class="panel" id="tab-universities" aria-label="Universities">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Universities</h1>
+          <p class="panel-desc">Search live university data across African countries</p>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="uni-search" placeholder="Search by name or domain…" autocomplete="off" aria-label="Search universities" maxlength="100"/>
+        </div>
+        <div class="filter-row">
+          <div class="field-grp">
+            <label class="field-lbl" for="uni-country">Country</label>
+            <div class="sel-wrap">
+              <select id="uni-country" aria-label="Select country">
+                <option value="Rwanda">🇷🇼 Rwanda</option>
+                <option value="Kenya">🇰🇪 Kenya</option>
+                <option value="Nigeria">🇳🇬 Nigeria</option>
+                <option value="Ghana">🇬🇭 Ghana</option>
+                <option value="South Africa">🇿🇦 South Africa</option>
+                <option value="Ethiopia">🇪🇹 Ethiopia</option>
+                <option value="Tanzania">🇹🇿 Tanzania</option>
+                <option value="Uganda">🇺🇬 Uganda</option>
+                <option value="Senegal">🇸🇳 Senegal</option>
+                <option value="Egypt">🇪🇬 Egypt</option>
+                <option value="Morocco">🇲🇦 Morocco</option>
+                <option value="Cameroon">🇨🇲 Cameroon</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="field-grp">
+            <label class="field-lbl" for="uni-sort">Sort</label>
+            <div class="sel-wrap">
+              <select id="uni-sort" aria-label="Sort universities">
+                <option value="name-asc">Name A → Z</option>
+                <option value="name-desc">Name Z → A</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <button class="btn-primary" id="uni-fetch-btn" aria-label="Search universities">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div id="uni-stats"  class="results-bar" aria-live="polite" style="display:none"></div>
+      <div id="uni-error"  class="alert-error"  role="alert"      style="display:none"></div>
+      <div id="uni-loader" class="skeletons"     aria-busy="true"  style="display:none">
+        <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+        <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+      </div>
+      <div id="uni-grid" class="card-grid" role="list"></div>
+    </section>
+
+    <!-- ── COUNTRIES ──────────────────────────────────────────── -->
+    <section class="panel" id="tab-countries" aria-label="Countries">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">African Countries</h1>
+          <p class="panel-desc">Explore all 54 nations — click any to find its universities</p>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="country-search" placeholder="Search countries or capitals…" autocomplete="off" aria-label="Search countries" maxlength="100"/>
+        </div>
+        <div class="filter-row">
+          <div class="field-grp">
+            <label class="field-lbl" for="country-region">Region</label>
+            <div class="sel-wrap">
+              <select id="country-region" aria-label="Filter by region">
+                <option value="">All Regions</option>
+                <option value="Eastern Africa">East Africa</option>
+                <option value="Western Africa">West Africa</option>
+                <option value="Northern Africa">North Africa</option>
+                <option value="Southern Africa">Southern Africa</option>
+                <option value="Middle Africa">Central Africa</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="field-grp">
+            <label class="field-lbl" for="country-sort">Sort</label>
+            <div class="sel-wrap">
+              <select id="country-sort" aria-label="Sort countries">
+                <option value="name-asc">Name A → Z</option>
+                <option value="pop-desc">Population ↓</option>
+                <option value="pop-asc">Population ↑</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="country-stats"  class="results-bar" aria-live="polite" style="display:none"></div>
+      <div id="country-error"  class="alert-error"  role="alert"      style="display:none"></div>
+      <div id="country-loader" class="skeletons"     aria-busy="true"  style="display:none">
+        <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+        <div class="sk"></div><div class="sk"></div><div class="sk"></div>
+      </div>
+      <div id="country-grid" class="card-grid" role="list"></div>
+    </section>
+
+    <!-- ── OPPORTUNITIES ──────────────────────────────────────── -->
+    <section class="panel" id="tab-news" aria-label="Opportunities">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Opportunities</h1>
+          <p class="panel-desc">Latest education news, grants and funding for African students</p>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="news-search" placeholder="e.g. Mastercard scholarship, study abroad Africa…" autocomplete="off" aria-label="Search opportunities" maxlength="100"/>
+        </div>
+        <div class="filter-row">
+          <button class="btn-primary" id="news-fetch-btn" aria-label="Search opportunities">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div class="chips-row" role="group" aria-label="Quick filters">
+        <button class="chip active" data-q="scholarship Africa students">Scholarships</button>
+        <button class="chip" data-q="Mastercard Foundation university Africa">Mastercard</button>
+        <button class="chip" data-q="Fulbright Chevening fellowship Africa">Fellowships</button>
+        <button class="chip" data-q="study abroad Africa funding 2025">Study Abroad</button>
+        <button class="chip" data-q="education grants Africa poor students">Grants</button>
+      </div>
+
+      <div id="news-stats"  class="results-bar" aria-live="polite" style="display:none"></div>
+      <div id="news-error"  class="alert-error"  role="alert"      style="display:none"></div>
+      <div id="news-loader" class="skeletons news-sk" aria-busy="true" style="display:none">
+        <div class="sk tall"></div><div class="sk tall"></div><div class="sk tall"></div>
+      </div>
+      <div id="news-grid" class="news-grid" role="list"></div>
+    </section>
+
+    <!-- ── SAVED ──────────────────────────────────────────────── -->
+    <section class="panel" id="tab-saved" aria-label="Saved items">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Saved</h1>
+          <p class="panel-desc">Your bookmarked scholarships and universities</p>
+        </div>
+      </div>
+      <div id="saved-empty" class="empty-full" style="display:none">
+        <div class="empty-icon" aria-hidden="true">🔖</div>
+        <h2 class="empty-title">Nothing saved yet</h2>
+        <p class="empty-desc">Tap the bookmark icon on any card to save it here.</p>
+      </div>
+      <div id="saved-grid" class="card-grid" role="list"></div>
+    </section>
+
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts — order matters -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/cache.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/scholarships.js"></script>
+  <script src="js/universities.js"></script>
+  <script src="js/countries.js"></script>
+  <script src="js/news.js"></script>
+  <script src="js/saved.js"></script>
+  <script src="js/prefs.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
