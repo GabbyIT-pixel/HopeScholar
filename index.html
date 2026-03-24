@@ -42,6 +42,10 @@
       </button>
 
       <p class="nav-section" style="margin-top:16px">My Space</p>
+      <button class="nav-btn" data-tab="finder">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+        <span>Study Finder</span>
+      </button>
       <button class="nav-btn" data-tab="saved">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
         <span>Saved</span>
@@ -311,6 +315,95 @@
       <div id="saved-grid" class="cards-grid"></div>
     </section>
 
+
+    <!-- ── STUDY FINDER ─────────────────────────────────────── -->
+    <section class="panel" id="tab-finder">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Study Finder</h1>
+          <p class="page-sub">Tell us what you want to study and where — we'll match you to the right scholarships and universities.</p>
+        </div>
+      </div>
+
+      <div class="finder-form" id="finder-form">
+
+        <div class="finder-step">
+          <div class="finder-step-header">
+            <span class="finder-step-icon">🎓</span>
+            <h2 class="finder-step-title">What is your intended study level?</h2>
+          </div>
+          <div class="finder-options" id="finder-level">
+            <button class="finder-opt" data-val="Undergraduate">Undergraduate</button>
+            <button class="finder-opt" data-val="Postgraduate">Postgraduate / Masters</button>
+            <button class="finder-opt" data-val="PhD">PhD / Doctorate</button>
+            <button class="finder-opt" data-val="Pre-University">Pre-University</button>
+          </div>
+        </div>
+
+        <div class="finder-step">
+          <div class="finder-step-header">
+            <span class="finder-step-icon">📚</span>
+            <h2 class="finder-step-title">What subject are you interested in?</h2>
+          </div>
+          <div class="finder-options" id="finder-subject">
+            <button class="finder-opt" data-val="Engineering & Technology">Engineering & Technology</button>
+            <button class="finder-opt" data-val="Computer Science & AI">Computer Science & AI</button>
+            <button class="finder-opt" data-val="Business & Leadership">Business & Leadership</button>
+            <button class="finder-opt" data-val="Medicine & Health">Medicine & Health</button>
+            <button class="finder-opt" data-val="Social Sciences">Social Sciences</button>
+            <button class="finder-opt" data-val="Agriculture & Environment">Agriculture & Environment</button>
+            <button class="finder-opt" data-val="Mathematics & Data Science">Mathematics & Data Science</button>
+            <button class="finder-opt" data-val="Law & Policy">Law & Policy</button>
+            <button class="finder-opt" data-val="Any Discipline">Any Discipline</button>
+          </div>
+        </div>
+
+        <div class="finder-step">
+          <div class="finder-step-header">
+            <span class="finder-step-icon">📍</span>
+            <h2 class="finder-step-title">What is your preferred study destination?</h2>
+          </div>
+          <div class="finder-options" id="finder-region">
+            <button class="finder-opt" data-val="africa">Africa</button>
+            <button class="finder-opt" data-val="usa">USA</button>
+            <button class="finder-opt" data-val="uk">United Kingdom</button>
+            <button class="finder-opt" data-val="europe">Europe</button>
+            <button class="finder-opt" data-val="canada">Canada</button>
+            <button class="finder-opt" data-val="">Anywhere</button>
+          </div>
+        </div>
+
+        <div class="finder-step">
+          <div class="finder-step-header">
+            <span class="finder-step-icon">💰</span>
+            <h2 class="finder-step-title">What type of funding are you looking for?</h2>
+          </div>
+          <div class="finder-options" id="finder-funding">
+            <button class="finder-opt" data-val="mastercard">Mastercard Foundation</button>
+            <button class="finder-opt" data-val="fullyfunded">Fully Funded / Work College</button>
+            <button class="finder-opt" data-val="global">Global Scholarships</button>
+            <button class="finder-opt" data-val="">Any Funding Type</button>
+          </div>
+        </div>
+
+        <div class="finder-actions">
+          <button class="finder-submit-btn" id="finder-submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Find My Scholarships
+          </button>
+          <button class="finder-reset-btn" id="finder-reset">Reset</button>
+        </div>
+      </div>
+
+      <div id="finder-results" style="display:none">
+        <div class="finder-results-header">
+          <h2 class="finder-results-title" id="finder-results-title"></h2>
+          <button class="finder-back-btn" id="finder-back">← New Search</button>
+        </div>
+        <div id="finder-results-grid" class="cards-grid"></div>
+      </div>
+    </section>
+
     <!-- ══ FOOTER ════════════════════════════════════════════════ -->
     <footer class="footer">
       <div class="footer-inner">
@@ -401,6 +494,7 @@
   <script src="js/news.js"></script>
   <script src="js/saved.js"></script>
   <script src="js/prefs.js"></script>
+  <script src="js/finder.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
