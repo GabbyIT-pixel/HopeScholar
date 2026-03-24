@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="HopeScholar — Connecting talented African students from poor communities to fully funded scholarships and universities worldwide."/>
+  <meta name="description" content="HopeScholar — Connecting talented African students from poor communities to fully funded scholarships and universities worldwide. Free education for all."/>
+  <meta name="keywords" content="African scholarships, fully funded, Mastercard Foundation, free education, universities Africa"/>
+  <meta property="og:title" content="HopeScholar — Fully Funded Education for Every African Student"/>
+  <meta property="og:description" content="Discover 51 fully funded scholarships and universities at zero cost. Built for African students from poor communities."/>
   <title>HopeScholar — Fully Funded Education for Every African Student</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -24,43 +27,37 @@
     <nav class="sidebar-nav">
       <p class="nav-label">Discover</p>
       <button class="nav-btn active" data-tab="scholarships" aria-current="page">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M2 17l10 6 10-6"/><path d="M2 13l10 6 10-6"/>
-        </svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M2 17l10 6 10-6"/><path d="M2 13l10 6 10-6"/></svg>
         Scholarships
       </button>
       <button class="nav-btn" data-tab="universities">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
-        </svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
         Universities
       </button>
       <button class="nav-btn" data-tab="countries">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
-        </svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
         Countries
       </button>
       <button class="nav-btn" data-tab="news">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/>
-          <path d="M18 14H10M15 18H10M10 10h4"/>
-        </svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14H10M15 18H10M10 10h4"/></svg>
         Opportunities
       </button>
       <p class="nav-label" style="margin-top:14px">My Space</p>
       <button class="nav-btn" data-tab="saved">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
-        </svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
         Saved
-        <span class="nav-pill" id="saved-badge" aria-label="saved count" style="display:none">0</span>
+        <span class="nav-pill" id="saved-badge" style="display:none">0</span>
       </button>
     </nav>
 
+    <div class="sidebar-footer-info">
+      <div class="sidebar-stat"><span class="stat-num">51</span><span class="stat-lbl">Scholarships</span></div>
+      <div class="sidebar-stat"><span class="stat-num">54</span><span class="stat-lbl">Countries</span></div>
+      <div class="sidebar-stat"><span class="stat-num">3</span><span class="stat-lbl">APIs</span></div>
+    </div>
+
     <div class="sidebar-profile">
-      <div class="profile-av" aria-hidden="true">GM</div>
+      <div class="profile-av">GM</div>
       <div class="profile-info">
         <span class="profile-name">Gabriel Mugisha</span>
         <span class="profile-role">ALU · Software Engineering</span>
@@ -70,10 +67,13 @@
 
   <!-- ══ MOBILE TOPBAR ════════════════════════════════════════ -->
   <header class="topbar" role="banner">
-    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <span class="topbar-title">HopeScholar</span>
+    <div class="topbar-brand">
+      <div class="topbar-mark">HS</div>
+      <span class="topbar-title">HopeScholar</span>
+    </div>
     <div style="width:40px"></div>
   </header>
   <div class="backdrop" id="backdrop" aria-hidden="true"></div>
@@ -82,37 +82,37 @@
   <main class="main" id="main-content">
 
     <!-- ── SCHOLARSHIPS ───────────────────────────────────────── -->
-    <section class="panel active" id="tab-scholarships" aria-label="Scholarships">
-      <div class="panel-header">
-        <div>
+    <section class="panel active" id="tab-scholarships">
+      <div class="panel-hero">
+        <div class="panel-hero-text">
           <h1 class="panel-title">Scholarships</h1>
-          <p class="panel-desc">Fully funded — zero cost. Visit each website to apply.</p>
+          <p class="panel-desc">51 fully funded opportunities — zero cost to you. Click any card to see full details and apply.</p>
         </div>
-        <span class="header-badge" id="schol-total"></span>
+        <span class="header-badge" id="schol-total">51 total</span>
       </div>
 
       <div class="filter-card">
         <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="search" id="schol-search" placeholder="Search scholarships, universities, countries…" autocomplete="off" aria-label="Search scholarships" maxlength="100"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="schol-search" placeholder="Search scholarships, countries, focus areas…" autocomplete="off" maxlength="100"/>
         </div>
         <div class="filter-row">
           <div class="field-grp">
             <label class="field-lbl" for="schol-cat">Category</label>
             <div class="sel-wrap">
-              <select id="schol-cat" aria-label="Filter by category">
+              <select id="schol-cat">
                 <option value="">All Categories</option>
                 <option value="mastercard">Mastercard Foundation</option>
                 <option value="fullyfunded">Fully Funded</option>
                 <option value="global">Global Scholarships</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
           <div class="field-grp">
             <label class="field-lbl" for="schol-region">Region</label>
             <div class="sel-wrap">
-              <select id="schol-region" aria-label="Filter by region">
+              <select id="schol-region">
                 <option value="">All Regions</option>
                 <option value="africa">Africa</option>
                 <option value="usa">USA</option>
@@ -121,18 +121,18 @@
                 <option value="canada">Canada</option>
                 <option value="other">Other</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
           <div class="field-grp">
-            <label class="field-lbl" for="schol-sort">Sort</label>
+            <label class="field-lbl" for="schol-sort">Sort by</label>
             <div class="sel-wrap">
-              <select id="schol-sort" aria-label="Sort scholarships">
+              <select id="schol-sort">
                 <option value="name-asc">Name A → Z</option>
                 <option value="name-desc">Name Z → A</option>
                 <option value="country">By Country</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
         </div>
@@ -143,24 +143,24 @@
     </section>
 
     <!-- ── UNIVERSITIES ───────────────────────────────────────── -->
-    <section class="panel" id="tab-universities" aria-label="Universities">
-      <div class="panel-header">
-        <div>
+    <section class="panel" id="tab-universities">
+      <div class="panel-hero">
+        <div class="panel-hero-text">
           <h1 class="panel-title">Universities</h1>
-          <p class="panel-desc">Search live university data across African countries</p>
+          <p class="panel-desc">Search live university data across African countries. Click any card for full details.</p>
         </div>
       </div>
 
       <div class="filter-card">
         <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="search" id="uni-search" placeholder="Search by name or domain…" autocomplete="off" aria-label="Search universities" maxlength="100"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="uni-search" placeholder="Search by university name or domain…" autocomplete="off" maxlength="100"/>
         </div>
         <div class="filter-row">
           <div class="field-grp">
             <label class="field-lbl" for="uni-country">Country</label>
             <div class="sel-wrap">
-              <select id="uni-country" aria-label="Select country">
+              <select id="uni-country">
                 <option value="Rwanda">🇷🇼 Rwanda</option>
                 <option value="Kenya">🇰🇪 Kenya</option>
                 <option value="Nigeria">🇳🇬 Nigeria</option>
@@ -174,29 +174,29 @@
                 <option value="Morocco">🇲🇦 Morocco</option>
                 <option value="Cameroon">🇨🇲 Cameroon</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
           <div class="field-grp">
-            <label class="field-lbl" for="uni-sort">Sort</label>
+            <label class="field-lbl" for="uni-sort">Sort by</label>
             <div class="sel-wrap">
-              <select id="uni-sort" aria-label="Sort universities">
+              <select id="uni-sort">
                 <option value="name-asc">Name A → Z</option>
                 <option value="name-desc">Name Z → A</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
-          <button class="btn-primary" id="uni-fetch-btn" aria-label="Search universities">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <button class="btn-primary" id="uni-fetch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             Search
           </button>
         </div>
       </div>
 
       <div id="uni-stats"  class="results-bar" aria-live="polite" style="display:none"></div>
-      <div id="uni-error"  class="alert-error"  role="alert"      style="display:none"></div>
-      <div id="uni-loader" class="skeletons"     aria-busy="true"  style="display:none">
+      <div id="uni-error"  class="alert-error"  role="alert"       style="display:none"></div>
+      <div id="uni-loader" class="skeletons"     aria-busy="true"   style="display:none">
         <div class="sk"></div><div class="sk"></div><div class="sk"></div>
         <div class="sk"></div><div class="sk"></div><div class="sk"></div>
       </div>
@@ -204,24 +204,24 @@
     </section>
 
     <!-- ── COUNTRIES ──────────────────────────────────────────── -->
-    <section class="panel" id="tab-countries" aria-label="Countries">
-      <div class="panel-header">
-        <div>
+    <section class="panel" id="tab-countries">
+      <div class="panel-hero">
+        <div class="panel-hero-text">
           <h1 class="panel-title">African Countries</h1>
-          <p class="panel-desc">Explore all 54 nations — click any to find its universities</p>
+          <p class="panel-desc">Explore all 54 sovereign African nations. Click any country to instantly find its universities.</p>
         </div>
       </div>
 
       <div class="filter-card">
         <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="search" id="country-search" placeholder="Search countries or capitals…" autocomplete="off" aria-label="Search countries" maxlength="100"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="country-search" placeholder="Search by country name or capital city…" autocomplete="off" maxlength="100"/>
         </div>
         <div class="filter-row">
           <div class="field-grp">
             <label class="field-lbl" for="country-region">Region</label>
             <div class="sel-wrap">
-              <select id="country-region" aria-label="Filter by region">
+              <select id="country-region">
                 <option value="">All Regions</option>
                 <option value="Eastern Africa">East Africa</option>
                 <option value="Western Africa">West Africa</option>
@@ -229,26 +229,26 @@
                 <option value="Southern Africa">Southern Africa</option>
                 <option value="Middle Africa">Central Africa</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
           <div class="field-grp">
-            <label class="field-lbl" for="country-sort">Sort</label>
+            <label class="field-lbl" for="country-sort">Sort by</label>
             <div class="sel-wrap">
-              <select id="country-sort" aria-label="Sort countries">
+              <select id="country-sort">
                 <option value="name-asc">Name A → Z</option>
                 <option value="pop-desc">Population ↓</option>
                 <option value="pop-asc">Population ↑</option>
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
         </div>
       </div>
 
       <div id="country-stats"  class="results-bar" aria-live="polite" style="display:none"></div>
-      <div id="country-error"  class="alert-error"  role="alert"      style="display:none"></div>
-      <div id="country-loader" class="skeletons"     aria-busy="true"  style="display:none">
+      <div id="country-error"  class="alert-error"  role="alert"       style="display:none"></div>
+      <div id="country-loader" class="skeletons"     aria-busy="true"   style="display:none">
         <div class="sk"></div><div class="sk"></div><div class="sk"></div>
         <div class="sk"></div><div class="sk"></div><div class="sk"></div>
       </div>
@@ -256,37 +256,37 @@
     </section>
 
     <!-- ── OPPORTUNITIES ──────────────────────────────────────── -->
-    <section class="panel" id="tab-news" aria-label="Opportunities">
-      <div class="panel-header">
-        <div>
+    <section class="panel" id="tab-news">
+      <div class="panel-hero">
+        <div class="panel-hero-text">
           <h1 class="panel-title">Opportunities</h1>
-          <p class="panel-desc">Latest education news, grants and funding for African students</p>
+          <p class="panel-desc">Latest scholarships, grants and education funding news for African students.</p>
         </div>
       </div>
 
       <div class="filter-card">
         <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="search" id="news-search" placeholder="e.g. Mastercard scholarship, study abroad Africa…" autocomplete="off" aria-label="Search opportunities" maxlength="100"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="news-search" placeholder="Search e.g. Mastercard, study abroad, Fulbright…" autocomplete="off" maxlength="100"/>
         </div>
         <div class="filter-row">
-          <button class="btn-primary" id="news-fetch-btn" aria-label="Search opportunities">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <button class="btn-primary" id="news-fetch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             Search
           </button>
         </div>
       </div>
 
       <div class="chips-row" role="group" aria-label="Quick filters">
-        <button class="chip active" data-q="scholarship Africa students">Scholarships</button>
-        <button class="chip" data-q="Mastercard Foundation university Africa">Mastercard</button>
-        <button class="chip" data-q="Fulbright Chevening fellowship Africa">Fellowships</button>
-        <button class="chip" data-q="study abroad Africa funding 2025">Study Abroad</button>
-        <button class="chip" data-q="education grants Africa poor students">Grants</button>
+        <button class="chip active" data-q="scholarship Africa">Scholarships</button>
+        <button class="chip" data-q="Mastercard Foundation Africa">Mastercard</button>
+        <button class="chip" data-q="Fulbright Chevening fellowship">Fellowships</button>
+        <button class="chip" data-q="study abroad Africa">Study Abroad</button>
+        <button class="chip" data-q="education grants Africa">Grants</button>
       </div>
 
       <div id="news-stats"  class="results-bar" aria-live="polite" style="display:none"></div>
-      <div id="news-error"  class="alert-error"  role="alert"      style="display:none"></div>
+      <div id="news-error"  class="alert-error"  role="alert"       style="display:none"></div>
       <div id="news-loader" class="skeletons news-sk" aria-busy="true" style="display:none">
         <div class="sk tall"></div><div class="sk tall"></div><div class="sk tall"></div>
       </div>
@@ -294,27 +294,92 @@
     </section>
 
     <!-- ── SAVED ──────────────────────────────────────────────── -->
-    <section class="panel" id="tab-saved" aria-label="Saved items">
-      <div class="panel-header">
-        <div>
+    <section class="panel" id="tab-saved">
+      <div class="panel-hero">
+        <div class="panel-hero-text">
           <h1 class="panel-title">Saved</h1>
-          <p class="panel-desc">Your bookmarked scholarships and universities</p>
+          <p class="panel-desc">Your bookmarked scholarships and universities — all in one place.</p>
         </div>
       </div>
       <div id="saved-empty" class="empty-full" style="display:none">
-        <div class="empty-icon" aria-hidden="true">🔖</div>
+        <div class="empty-icon">🔖</div>
         <h2 class="empty-title">Nothing saved yet</h2>
-        <p class="empty-desc">Tap the bookmark icon on any card to save it here.</p>
+        <p class="empty-desc">Click the bookmark icon on any card to save it here for quick access.</p>
       </div>
       <div id="saved-grid" class="card-grid" role="list"></div>
     </section>
 
+    <!-- ══ PROFESSIONAL FOOTER ══════════════════════════════════ -->
+    <footer class="site-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-mark">HS</div>
+            <div>
+              <p class="footer-logo-name">HopeScholar</p>
+              <p class="footer-logo-sub">Free Education for All</p>
+            </div>
+          </div>
+          <p class="footer-mission">Empowering African students from poor communities to access world-class, fully funded education — at absolutely zero cost.</p>
+        </div>
+
+        <div class="footer-links">
+          <div class="footer-col">
+            <p class="footer-col-title">Scholarships</p>
+            <a href="#" onclick="switchTab('scholarships');$('schol-cat').value='mastercard';Scholarships.render();return false">Mastercard Foundation</a>
+            <a href="#" onclick="switchTab('scholarships');$('schol-cat').value='fullyfunded';Scholarships.render();return false">Fully Funded</a>
+            <a href="#" onclick="switchTab('scholarships');$('schol-cat').value='global';Scholarships.render();return false">Global Programs</a>
+            <a href="#" onclick="switchTab('scholarships');$('schol-region').value='africa';Scholarships.render();return false">Africa Region</a>
+          </div>
+          <div class="footer-col">
+            <p class="footer-col-title">Explore</p>
+            <a href="#" onclick="switchTab('universities');return false">Universities</a>
+            <a href="#" onclick="switchTab('countries');return false">African Countries</a>
+            <a href="#" onclick="switchTab('news');return false">Opportunities</a>
+            <a href="#" onclick="switchTab('saved');return false">Saved Items</a>
+          </div>
+          <div class="footer-col">
+            <p class="footer-col-title">APIs Used</p>
+            <a href="https://github.com/Hipo/university-domains-list-api" target="_blank" rel="noopener">Hipolabs Universities</a>
+            <a href="https://restcountries.com" target="_blank" rel="noopener">REST Countries v3</a>
+            <a href="https://rss2json.com" target="_blank" rel="noopener">RSS2JSON</a>
+            <a href="https://mastercardfdn.org" target="_blank" rel="noopener">Mastercard Foundation</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <p>© 2025 HopeScholar · Built by <strong>Gabriel Mugisha</strong> · African Leadership University</p>
+          <p class="footer-bottom-sub">Web Infrastructure & APIs Assignment · Software Engineering</p>
+        </div>
+        <div class="footer-bottom-right">
+          <a href="https://github.com/GabbyIT-pixel/HopeScholar" target="_blank" rel="noopener" class="footer-icon-btn" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="https://gabrielmugisha.tech" target="_blank" rel="noopener" class="footer-icon-btn" title="Website">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
   </main>
 
-  <!-- Toast notification -->
+  <!-- ══ MODAL ════════════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="modal-overlay" role="dialog" aria-modal="true" aria-label="Details">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ════════════════════════════════════════════════ -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- Scripts — order matters -->
+  <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/cache.js"></script>

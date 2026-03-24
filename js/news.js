@@ -1,121 +1,28 @@
-/* ══════════════════════════════════════════════════════════════
-   news.js — Fetch and render education news & opportunities
-   API:    RSS2JSON + BBC Education RSS (free, no key required)
-   Docs:   https://rss2json.com
-   Bonus:  API responses cached in localStorage (cache.js)
-   Project: HopeScholar
-   Author:  Gabriel Mugisha | ALU | gabrielmugisha.tech
-   ══════════════════════════════════════════════════════════════ */
-
+/* news.js — HopeScholar | RSS + static fallback */
 'use strict';
-
-const News = {
-  data:    [],
-  current: 'scholarship Africa students',
-
-  async load(query) {
-    // Input validation (Bonus: Security)
-    this.current = validateInput(query || $('news-search').value.trim() || 'scholarship Africa students', 100);
-
-    clearError('news');
-    showLoader('news');
-    this._syncChips();
-
-    // ── Check cache first (Bonus: Performance) ──────────────
-    const cacheKey = `news_${this.current}`;
-    const cached   = Cache.get(cacheKey);
-    if (cached) {
-      this.data = cached;
-      hideLoader('news');
-      this.render();
-      showToast('Loaded from cache ⚡');
-      return;
-    }
-
-    const feed = 'https://www.theguardian.com/education/rss';
-    const url  = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&api_key=public&count=20`;
-
-    try {
-      const res  = await fetchWithTimeout(url);
-      const json = await res.json();
-
-      if (json.status !== 'ok' || !Array.isArray(json.items)) {
-        throw new Error('News feed returned an unexpected response.');
-      }
-
-      const keyword  = this.current.toLowerCase().split(' ')[0];
-      const filtered = json.items.filter(i =>
-        (i.title + ' ' + (i.description || '')).toLowerCase().includes(keyword)
-      );
-      const articles = (filtered.length >= 3 ? filtered : json.items).slice(0, 15);
-
-      // Store in cache (Bonus: Performance)
-      Cache.set(cacheKey, articles);
-
-      this.data = articles;
-      hideLoader('news');
-      this.render();
-    } catch (err) {
-      hideLoader('news');
-      showError('news', `Could not load news: ${err.message}`);
-    }
-  },
-
-  render() {
-    const grid = $('news-grid');
-    showStats('news', `${this.data.length} article${this.data.length !== 1 ? 's' : ''} found`);
-
-    if (!this.data.length) {
-      grid.innerHTML = emptyStateHtml('📰', 'No articles found', 'Try a different keyword or use the quick topic buttons above.');
-      return;
-    }
-
-    grid.innerHTML = this.data.map(item => this._cardHtml(item)).join('');
-  },
-
-  _cardHtml(item) {
-    const title   = escapeHtml(item.title || 'Untitled');
-    const desc    = escapeHtml(truncate(item.description || item.content || '', 160));
-    const url     = item.link || '#';
-    const img     = item.thumbnail || item.enclosure?.link || null;
-    const source  = escapeHtml(item.author || 'BBC Education');
-    const dateStr = formatDate(item.pubDate);
-
-    const imgHtml = img
-      ? `<img class="news-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'news-placeholder\\'>📰</div>'">`
-      : `<div class="news-placeholder" aria-hidden="true">📰</div>`;
-
-    return `
-      <article class="news-card" role="listitem">
-        ${imgHtml}
-        <div class="news-body">
-          <div class="news-meta">
-            <span class="news-source">${source}</span>
-            ${dateStr ? `<span class="news-date">${dateStr}</span>` : ''}
-          </div>
-          <h3 class="news-title">${title}</h3>
-          ${desc ? `<p class="news-desc">${desc}</p>` : ''}
-          <a class="card-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
-            Read full article ${ARROW_SVG}
-          </a>
-        </div>
-      </article>`;
-  },
-
-  _syncChips() {
-    document.querySelectorAll('.chip').forEach(c => {
-      c.classList.toggle('active', c.dataset.q === this.current);
-    });
-  },
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  $('news-fetch-btn')?.addEventListener('click', () => News.load($('news-search').value.trim()));
-  $('news-search')?.addEventListener('keydown', e => { if (e.key === 'Enter') News.load($('news-search').value.trim()); });
-  document.querySelectorAll('.chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $('news-search').value = btn.dataset.q;
-      News.load(btn.dataset.q);
-    });
-  });
-});
+const News={data:[],current:'scholarship Africa',
+FEEDS:['https://www.scidev.net/sub-saharan-africa/feed/','https://www.universityworldnews.com/rss.php','https://feeds.feedburner.com/scholarshippositions'],
+STATIC:[
+{title:'Mastercard Foundation Scholars Program 2025 — Apply Now',description:'Fully funded scholarships for young Africans at 50+ partner universities across Africa and globally. Covers tuition, accommodation, meals and transport.',link:'https://mastercardfdn.org/en/what-we-do/our-programs/mastercard-foundation-scholars-program/',author:'Mastercard Foundation',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Chevening Scholarships 2025-2026 — UK Government Fully Funded',description:"The UK government's global scholarship for future leaders. Full funding to study a master's degree at any UK university.",link:'https://www.chevening.org',author:'UK Government',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Gates Cambridge Scholarship — Full Funding at Cambridge University',description:'Fully-funded scholarships for outstanding international applicants to pursue postgraduate study at the University of Cambridge.',link:'https://www.gatescambridge.org',author:'Gates Cambridge',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Fulbright Foreign Student Program — Study in the USA Free',description:'US government flagship scholarship offering full funding for graduate students to study and conduct research in the United States.',link:'https://foreign.fulbrightonline.org',author:'US Government',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Erasmus Mundus Joint Masters 2025 — Study Across Europe Free',description:'EU-funded scholarships to study in multiple European countries. Full tuition + living allowance + travel costs covered.',link:'https://ec.europa.eu/education/external-activities/erasmus-mundus_en',author:'European Union',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'DAAD Scholarships 2025 — Study in Germany Fully Funded',description:'German government scholarships for international students. Covers tuition, living costs and travel to Germany.',link:'https://www.daad.de/en/',author:'DAAD Germany',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Commonwealth Scholarships 2025 — Study in the UK',description:'For citizens of Commonwealth countries including most African nations. Full funding for postgraduate study in the UK.',link:'https://cscuk.fcdo.gov.uk',author:'Commonwealth Scholarship Commission',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Berea College — 100% Free Tuition for Every Student',description:"Every admitted student receives a Tuition Promise Scholarship covering four years of study at zero cost. Perfect for African students from low-income families.",link:'https://www.berea.edu',author:'Berea College',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Carnegie Mellon University Africa — Postgraduate Tech Scholarships',description:"CMU Africa in Kigali offers master's degrees in software engineering, AI, data science and cybersecurity. Fully funded through the Mastercard Foundation.",link:'https://africa.engineering.cmu.edu',author:'CMU Africa',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Oxford AfOx Scholarship — Specifically for African Students',description:'The Africa Oxford Initiative (AfOx) provides fully funded scholarships for African students to study postgraduate programmes at the University of Oxford.',link:'https://www.ox.ac.uk/clarendon',author:'University of Oxford',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Harvard University — Meets 100% of Financial Need for All Students',description:'Harvard meets the full demonstrated financial need of every admitted student. International students from low-income families pay little or nothing.',link:'https://www.harvard.edu',author:'Harvard University',pubDate:new Date().toISOString(),thumbnail:null},
+{title:'Princeton University — No-Loan Policy for All Students Worldwide',description:'Princeton replaces all loans with grants. Among the most generous financial aid programs in the world for international students.',link:'https://www.princeton.edu',author:'Princeton University',pubDate:new Date().toISOString(),thumbnail:null},
+],
+async load(query){this.current=validateInput(query||$('news-search').value.trim()||'scholarship Africa',100);clearError('news');showLoader('news');this._syncChips();const ck=`news_${this.current}`;const cached=Cache.get(ck);if(cached){this.data=cached;hideLoader('news');this.render();showToast('Loaded from cache ⚡');return;}
+let articles=null;
+for(const feed of this.FEEDS){try{articles=await this._fetch(feed,this.current);if(articles&&articles.length>0)break;}catch{continue;}}
+if(!articles||!articles.length){const kw=this.current.toLowerCase().split(' ')[0];const f=this.STATIC.filter(a=>(a.title+' '+a.description).toLowerCase().includes(kw));articles=f.length>=3?f:this.STATIC;}
+Cache.set(ck,articles);this.data=articles;hideLoader('news');this.render();},
+async _fetch(feedUrl,query){const url=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=20`;const res=await fetchWithTimeout(url,8000);const json=await res.json();if(json.status!=='ok'||!Array.isArray(json.items)||!json.items.length)throw new Error('Feed failed');const kw=query.toLowerCase().split(' ')[0];const f=json.items.filter(i=>(i.title+' '+(i.description||'')).toLowerCase().includes(kw));return(f.length>=2?f:json.items).slice(0,12);},
+render(){const grid=$('news-grid');showStats('news',`${this.data.length} opportunit${this.data.length!==1?'ies':'y'} found`);if(!this.data.length){grid.innerHTML=emptyStateHtml('📰','No opportunities found','Try a different keyword or use the topic buttons above.');return;}grid.innerHTML=this.data.map(i=>this._cardHtml(i)).join('');},
+_cardHtml(item){const title=escapeHtml(item.title||'Untitled');const desc=escapeHtml(truncate(item.description||item.content||'',180));const url=item.link||'#';const img=item.thumbnail||item.enclosure?.link||null;const source=escapeHtml(item.author||'HopeScholar');const date=formatDate(item.pubDate);const imgHtml=img?`<img class="news-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'news-placeholder\\'>🎓</div>'">`:`<div class="news-placeholder">🎓</div>`;return`<article class="news-card" role="listitem">${imgHtml}<div class="news-body"><div class="news-meta"><span class="news-source">${source}</span>${date?`<span class="news-date">${date}</span>`:''}</div><h3 class="news-title">${title}</h3>${desc?`<p class="news-desc">${desc}</p>`:''}<a class="news-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">View Opportunity ${ARROW_SVG}</a></div></article>`;},
+_syncChips(){document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.q===this.current));}};
+document.addEventListener('DOMContentLoaded',()=>{$('news-fetch-btn')?.addEventListener('click',()=>News.load($('news-search').value.trim()));$('news-search')?.addEventListener('keydown',e=>{if(e.key==='Enter')News.load($('news-search').value.trim());});document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{$('news-search').value=b.dataset.q;News.load(b.dataset.q);}));});

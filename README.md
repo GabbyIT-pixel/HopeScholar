@@ -1,45 +1,46 @@
 # 🌍 HopeScholar
 ### *Connecting talented African students to fully funded education worldwide*
 
-> Live at **[gabrielmugisha.tech](https://gabrielmugisha.tech)**
+> 🔴 **Live at [gabrielmugisha.tech](https://gabrielmugisha.tech)**
 
-HopeScholar is a web application built to solve a real problem faced by students from **poor communities across Africa** — the lack of a single, reliable place to discover fully funded scholarships and universities that cost absolutely nothing.
+HopeScholar is a professional web application built to solve a real problem faced by students from **poor communities across Africa** — the lack of a single, reliable place to discover fully funded scholarships and universities that cost absolutely nothing.
 
 **Author:** Gabriel Mugisha | African Leadership University (ALU) | Software Engineering
-**Email:** g.mugisha4@alustudent
+**Email:** g.mugisha4@alustudent.com
 **GitHub:** https://github.com/GabbyIT-pixel
+**Live:** https://gabrielmugisha.tech
 
 ---
 
 ## 🎯 The Problem We Solve
 
-Millions of talented African students from low-income families never access higher education — not because they lack ability, but because they lack information about opportunities that are 100% free. HopeScholar puts all those opportunities in one place, with direct links to official university websites so students can apply at no cost.
+Millions of talented African students from low-income families never access higher education — not because they lack ability, but because they lack information about opportunities that are 100% free. HopeScholar puts all those opportunities in one place, with clean cards, detail modals, and direct links to official university websites.
 
 ---
 
-## 🌟 What the App Does
+## 🌟 Features
 
-| Tab | Content |
+| Tab | What it does |
 |---|---|
-| 🎓 Scholarships | 50 curated fully funded scholarships with search, filter by category/region, and sort |
-| 🏫 Universities | Live university data from Hipolabs API — search across 12+ African countries |
-| 🌍 Countries | All 54 African nations with flags, capitals, population — click to find universities |
-| 📰 Opportunities | Live education news via BBC Education RSS feed with keyword search |
-| 🔖 Saved | Bookmark scholarships and universities — persists across sessions |
+| 🎓 **Scholarships** | 51 curated fully funded scholarships — search, filter by category/region, sort. Click any card for full details in a modal popup. |
+| 🏫 **Universities** | Live university data from Hipolabs API — 12+ African countries, search, sort, click for details. |
+| 🌍 **Countries** | All 54 African sovereign nations with flags — filter, sort, click to find universities. |
+| 📰 **Opportunities** | Live education news from RSS feeds with static fallback — always shows content. |
+| 🔖 **Saved** | Bookmark anything — persists across sessions in localStorage. |
 
 ---
 
 ## 🌐 APIs Used
 
-| API | Purpose | Documentation | Key Required |
+| API | Used For | Documentation | Key Required |
 |---|---|---|---|
-| [Hipolabs Universities API](http://universities.hipolabs.com) | Live university listings by country | [GitHub Docs](https://github.com/Hipo/university-domains-list-api) | ❌ None |
-| [REST Countries v3](https://restcountries.com) | African country data with flags | [restcountries.com](https://restcountries.com/#api-endpoints-v3) | ❌ None |
-| [RSS2JSON](https://rss2json.com) + BBC Education RSS | Live education news feed | [rss2json.com/docs](https://rss2json.com/docs) | ❌ None |
+| [Hipolabs Universities API](http://universities.hipolabs.com) | Live university data by country | [GitHub](https://github.com/Hipo/university-domains-list-api) | ❌ None |
+| [REST Countries v3](https://restcountries.com) | All African nations with flags & data | [Docs](https://restcountries.com/#api-endpoints-v3) | ❌ None |
+| [RSS2JSON](https://rss2json.com) + Education RSS | Live news & opportunities | [Docs](https://rss2json.com/docs) | ❌ None |
 
-> **API Key Security:** All APIs are public and require no credentials. This is intentional — it eliminates any risk of key exposure, which is the most secure approach for a client-side application. No keys to expose, no keys to leak.
+> **Security:** All 3 APIs are public — no credentials needed. This eliminates any risk of API key exposure, the most secure approach for a client-side application.
 
-**Credit:** Hipo Labs · REST Countries contributors · RSS2JSON · BBC News Education · Mastercard Foundation
+**Credits:** Hipo Labs · REST Countries contributors · RSS2JSON · BBC/Guardian Education · Mastercard Foundation
 
 ---
 
@@ -47,224 +48,155 @@ Millions of talented African students from low-income families never access high
 
 ```
 HopeScholar/
-├── index.html                  Main application (5 tabs + sidebar)
+├── index.html                    Full app — 5 tabs, sidebar, footer, modal
 ├── css/
-│   └── style.css               All styles — layout, cards, responsive, animations
+│   └── style.css                 Complete styles — layout, cards, modal, footer, responsive
 ├── js/
-│   ├── data.js                 50 curated scholarships with real official links
-│   ├── utils.js                escapeHtml (XSS), validateInput, fetchWithTimeout, debounce
-│   ├── cache.js                API response caching with 1-hour TTL (Bonus)
-│   ├── ui.js                   DOM helpers, showLoader, showError, tab routing, toast
-│   ├── scholarships.js         Filter by category/region, sort, render
-│   ├── universities.js         Live Hipolabs API, cached, filter, sort, render
-│   ├── countries.js            Live REST Countries API, cached, filter, sort, render
-│   ├── news.js                 BBC Education RSS, cached, keyword filter, render
-│   ├── saved.js                localStorage bookmark management
-│   ├── prefs.js                User preferences — saves last filters (Bonus)
-│   └── app.js                  Entry point — init modules, tab routing, shortcuts
-├── nginx.conf                  Nginx config for Web01/Web02 + Lb01 load balancer
-├── Dockerfile                  Docker container config (Bonus)
-├── docker-compose.yml          Docker Compose setup (Bonus)
-├── docker-nginx.conf           Nginx config inside Docker container (Bonus)
+│   ├── data.js                   51 curated scholarships with real links
+│   ├── utils.js                  escapeHtml (XSS), validateInput, fetchWithTimeout, debounce
+│   ├── cache.js                  API caching with 1-hour TTL (Bonus: Performance)
+│   ├── ui.js                     DOM helpers, tab routing, sidebar, toast, modal close
+│   ├── scholarships.js           Filter, sort, render cards + detail modal
+│   ├── universities.js           Hipolabs API + cache, filter, sort, detail modal
+│   ├── countries.js              REST Countries API + cache, filter, sort, territory exclusion
+│   ├── news.js                   RSS feeds + static fallback (always works)
+│   ├── saved.js                  localStorage bookmarks + badge counter
+│   ├── prefs.js                  User preferences — restores last filters (Bonus)
+│   └── app.js                    Entry point — init, tab routing, keyboard shortcuts
+├── nginx.conf                    Web01/Web02 static + Lb01 HTTPS load balancer config
+├── Dockerfile                    Docker container (Bonus: Containerisation)
+├── docker-compose.yml            Docker Compose setup (Bonus)
+├── docker-nginx.conf             Nginx config inside Docker
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          GitHub Actions CI/CD pipeline (Bonus)
+│       └── deploy.yml            GitHub Actions auto-deploy (Bonus: CI/CD)
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## ✨ Core Features
+## 🏆 Bonus Features
 
-- 50 curated scholarships — Mastercard Foundation, Work Colleges, Ivy League, Global programs
-- Filter by category: Mastercard Foundation / Fully Funded / Global Scholarships
-- Filter by region: Africa / USA / UK / Europe / Canada / Other
-- Sort by name A→Z, Z→A, or by country
-- Live university search via Hipolabs API across 12+ African countries
-- All 54 African countries with flags, population, sub-region filter
-- Click any country → instantly load its universities
-- Live education news from BBC Education RSS with keyword search + topic chips
-- Bookmark scholarships and universities — persists in localStorage
-- Live bookmark badge counter in sidebar
-- Skeleton loading animations while data fetches
-- Error handling — friendly messages for API failures and timeouts
-- Keyboard shortcut: `Ctrl+K` focuses scholarship search
-- Fully responsive — sidebar collapses to mobile drawer on screens ≤960px
+### ① API Caching — Performance (`js/cache.js`)
+All API responses stored in `localStorage` with 1-hour TTL. Repeat visits load instantly. Toast notification shows "Loaded from cache ⚡".
 
----
+### ② XSS Protection — Security (`js/utils.js`)
+`escapeHtml()` applied to every API string before DOM insertion. Prevents cross-site scripting attacks.
 
-## 🏆 Bonus Features Implemented
+### ③ Input Validation — Security (`js/utils.js`)
+`validateInput()` strips HTML tags, special characters, and enforces length limits before any user input reaches API calls.
 
-### 1. API Response Caching — Performance (`js/cache.js`)
-All three API responses are cached in `localStorage` with a **1-hour TTL**. Repeat visits load data instantly without hitting the API again. A toast notification shows "Loaded from cache ⚡" when cached data is used.
+### ④ User Preferences — Enhanced Features (`js/prefs.js`)
+Last selected filters (country, region, sort) saved to localStorage and auto-restored on next visit.
 
-```javascript
-// Check cache before fetching
-const cached = Cache.get('african_countries');
-if (cached) { this.data = cached; this.render(); return; }
-// Store response in cache after fetching
-Cache.set('african_countries', json);
-```
+### ⑤ Detail Modal — UX Enhancement
+Cards are clean and minimal. Click any card → smooth animated modal shows full details + official website button.
 
-### 2. XSS Protection — Advanced Security (`js/utils.js`)
-Every string from API responses passes through `escapeHtml()` before being inserted into the DOM. This prevents cross-site scripting attacks.
-
-```javascript
-function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;')
-            .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-```
-
-### 3. Input Validation — Advanced Security (`js/utils.js`)
-All user-supplied search inputs are sanitised via `validateInput()` before being used in API requests — strips HTML tags, special characters, and enforces length limits.
-
-```javascript
-function validateInput(str, maxLength = 100) {
-  let clean = str.replace(/<[^>]*>/g, '');       // strip HTML tags
-  clean = clean.replace(/[<>"';&]/g, '');          // strip injection chars
-  return clean.trim().slice(0, maxLength);          // enforce length limit
-}
-```
-
-### 4. User Preferences — Enhanced Features (`js/prefs.js`)
-The app remembers the user's last selected country, region filter, and sort preferences in `localStorage`. The next time they open the app, their filters are automatically restored.
-
-### 5. Docker Containerisation — Scalability (`Dockerfile`, `docker-compose.yml`)
-The app can be run inside a Docker container using Nginx Alpine — lightweight, portable, and production-ready.
-
+### ⑥ Docker Containerisation — Scalability (`Dockerfile`)
 ```bash
 docker-compose up -d
 # App runs at http://localhost:8080
 ```
 
-### 6. CI/CD Pipeline — GitHub Actions (`.github/workflows/deploy.yml`)
-Every push to the `main` branch automatically deploys to Web01 and Web02 via SSH, then verifies both servers respond correctly.
+### ⑦ CI/CD Pipeline — GitHub Actions (`.github/workflows/deploy.yml`)
+Every `git push` to `main` auto-deploys to Web01 and Web02 via SSH.
 
 ---
 
 ## 🚀 Running Locally
 
-No installation or build step needed — pure static site.
-
 ```bash
-# 1. Clone the repository
+# 1. Clone
 git clone https://github.com/GabbyIT-pixel/HopeScholar.git
 cd HopeScholar
 
-# 2a. Open directly in browser
-open index.html        # macOS
-start index.html       # Windows
+# 2a. Open directly
+open index.html          # macOS
+start index.html         # Windows
 
-# 2b. Use a local server (recommended — avoids CORS edge cases)
+# 2b. Local server (recommended)
 npx serve .
-# Open http://localhost:3000
+# → http://localhost:3000
 
-# 2c. Run with Docker (Bonus)
+# 2c. Docker (Bonus)
 docker-compose up -d
-# Open http://localhost:8080
+# → http://localhost:8080
 ```
 
 ---
 
 ## ☁️ Deployment Guide
 
-### Step 1 — Deploy on Web01 (54.227.215.118)
-
+### Step 1 — Web01 (54.227.215.118)
 ```bash
-# SSH into Web01
 ssh -i ~/.ssh/school ubuntu@54.227.215.118
-
-# Install Nginx
 sudo apt update && sudo apt install -y nginx
-
-# Create web root
 sudo mkdir -p /var/www/hopescholar
 exit
 
-# Upload files from your local machine
+# Upload files
 scp -r ./* ubuntu@54.227.215.118:/var/www/hopescholar/
 
-# SSH back in and configure Nginx
+# Configure Nginx
 ssh -i ~/.ssh/school ubuntu@54.227.215.118
 sudo nano /etc/nginx/sites-available/hopescholar
-# Paste the Web01/Web02 block from nginx.conf
+# Paste Web01/Web02 block from nginx.conf
 
 sudo ln -s /etc/nginx/sites-available/hopescholar /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
-
-# Verify
-curl http://54.227.215.118/health    # → OK
+curl http://54.227.215.118/health   # → OK
 ```
 
-### Step 2 — Deploy on Web02 (3.83.142.166)
+### Step 2 — Web02 (3.83.142.166)
+Repeat Step 1 replacing `54.227.215.118` with `3.83.142.166`.
 
-Repeat all of Step 1 exactly, replacing `54.227.215.118` with `3.83.142.166`.
-
-### Step 3 — Configure Load Balancer on Lb01 (98.81.221.12)
-
+### Step 3 — Load Balancer Lb01 (98.81.221.12)
 ```bash
-# SSH into Lb01
 ssh -i ~/.ssh/school ubuntu@98.81.221.12
-
-# Install Nginx and Certbot
 sudo apt update && sudo apt install -y nginx certbot python3-certbot-nginx
 
-# IMPORTANT: Point gabrielmugisha.tech A record → 98.81.221.12
-# in your domain registrar BEFORE running certbot
+# Point gabrielmugisha.tech A record → 98.81.221.12 FIRST
 
-# Get free SSL certificate
 sudo certbot --nginx -d gabrielmugisha.tech -d www.gabrielmugisha.tech
-
-# Configure load balancer
 sudo nano /etc/nginx/sites-available/hopescholar
-# Paste the Lb01 block from nginx.conf
+# Paste Lb01 block from nginx.conf
 
 sudo ln -s /etc/nginx/sites-available/hopescholar /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-### Step 4 — Set Up CI/CD (GitHub Actions — Bonus)
+### Step 4 — CI/CD Setup (Bonus)
+GitHub → Settings → Secrets → Actions → New secret:
+- `SSH_PRIVATE_KEY` → paste `~/.ssh/school` content
+- `WEB01_IP` → `54.227.215.118`
+- `WEB02_IP` → `3.83.142.166`
 
-1. Go to your GitHub repo → **Settings** → **Secrets and variables** → **Actions**
-2. Add these secrets:
-   - `SSH_PRIVATE_KEY` → paste the full content of your `~/.ssh/school` private key
-   - `WEB01_IP` → `54.227.215.118`
-   - `WEB02_IP` → `3.83.142.166`
-3. Every `git push` to `main` will now automatically deploy to both servers
+Every `git push` to `main` now auto-deploys to both servers.
 
 ### Step 5 — Test Everything
-
 ```bash
-# Both web servers respond
-curl http://54.227.215.118/health    # → OK
-curl http://3.83.142.166/health      # → OK
-
-# HTTPS and load balancer work
-curl https://gabrielmugisha.tech/health   # → LB OK
-
-# HTTP redirects to HTTPS
-curl -I http://gabrielmugisha.tech        # → 301 Moved Permanently
-
-# Load balancing hits both servers
-for i in {1..6}; do curl -s https://gabrielmugisha.tech/health; done
+curl http://54.227.215.118/health           # → OK
+curl http://3.83.142.166/health             # → OK
+curl https://gabrielmugisha.tech/health     # → LB OK
+curl -I http://gabrielmugisha.tech          # → 301 (HTTPS redirect)
+for i in {1..6}; do curl -s https://gabrielmugisha.tech/health; done  # Load balancing
 ```
 
 ---
 
 ## 🔒 Security Implementation
 
-| Security Measure | Implementation |
+| Measure | Implementation |
 |---|---|
-| XSS Protection | `escapeHtml()` in `utils.js` — applied to every API string before DOM insertion |
-| Input Validation | `validateInput()` in `utils.js` — strips HTML, special chars, enforces length limits |
-| No API keys | All 3 APIs are public and credential-free — zero exposure risk |
-| HTTPS | Let's Encrypt certificate on Lb01 — HTTP auto-redirects to HTTPS |
-| Security headers | `HSTS`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff` in Nginx |
-| `.gitignore` | Excludes `.env`, `.pem`, `.key`, log files from version control |
+| XSS Protection | `escapeHtml()` — every API string sanitised before DOM insertion |
+| Input Validation | `validateInput()` — strips HTML/special chars, enforces length limits |
+| No API Keys | All 3 APIs are public — zero credential exposure risk |
+| HTTPS | Let's Encrypt on Lb01 — HTTP auto-redirects to HTTPS |
+| Security Headers | HSTS, X-Frame-Options: DENY, X-Content-Type-Options: nosniff |
+| .gitignore | Excludes `.env`, `.pem`, `.key`, log files |
 
 ---
 
@@ -272,37 +204,35 @@ for i in {1..6}; do curl -s https://gabrielmugisha.tech/health; done
 
 | Challenge | Solution |
 |---|---|
-| Finding reliable APIs with no secret keys | Used 3 well-known public APIs — Hipolabs, REST Countries, BBC RSS via RSS2JSON |
-| XSS risk from third-party API content | `escapeHtml()` in `utils.js` sanitises every string before DOM insertion |
+| RSS2JSON returning HTTP 422 | Built 3-layer fallback: try 3 RSS feeds, then show 12 curated static opportunities |
+| REST Countries including territories | Excluded non-sovereign territories (British Indian Ocean Territory, etc.) |
+| Cards showing too much information | Redesigned to clean minimal cards — full details in animated modal popup |
 | Slow repeat API calls | `cache.js` stores responses in localStorage with 1-hour TTL |
-| Organising a large JavaScript codebase | Split into 11 focused files with single responsibilities |
-| Application window accuracy | Removed open/closed labels — cards link directly to official websites |
-| User experience on repeat visits | `prefs.js` saves and restores last selected filters automatically |
+| XSS from API content | `escapeHtml()` in utils.js sanitises every string before DOM insertion |
+| User losing filter settings | `prefs.js` saves and auto-restores last selected filters |
 
 ---
 
 ## 📹 Demo Video
+[Add link — max 2 minutes]
 
-[Add YouTube or Vimeo link — strictly max 2 minutes]
-
-**What to show in the video:**
-1. Open `index.html` locally — show scholarships tab, search, filter, sort
-2. Switch to Universities — search a country, sort results
-3. Switch to Countries — filter by region, click a country to jump to universities
-4. Switch to Opportunities — use chips and keyword search
-5. Save a scholarship — show saved tab with bookmark count
-6. Open `https://gabrielmugisha.tech` — show same app live
-7. Run `curl http://54.227.215.118/health` and `curl http://3.83.142.166/health` — prove both servers work
+**Script:**
+1. Open locally → show scholarships, search, filter, click card for modal
+2. Universities → select country, search, click card
+3. Countries → filter by region, click country → jumps to universities
+4. Opportunities → use topic chips
+5. Save a scholarship → show Saved tab
+6. Open `https://gabrielmugisha.tech` → same app live
+7. `curl http://54.227.215.118/health` and `curl http://3.83.142.166/health`
 
 ---
 
-## 📜 Credits & Attribution
+## 📜 Credits
 
 - **Hipo Labs** — Universities API (hipolabs.com)
 - **REST Countries** — Country data API (restcountries.com)
 - **RSS2JSON** — RSS to JSON conversion (rss2json.com)
-- **BBC News Education** — Education RSS news feed
-- **Mastercard Foundation** — Scholarship program data source
-- **Plus Jakarta Sans** — Google Fonts typography
+- **Mastercard Foundation** — Scholarship program data
+- **Plus Jakarta Sans** — Google Fonts
 
-*Built for the Web Infrastructure & APIs assignment — African Leadership University 2025*
+*African Leadership University · Web Infrastructure & APIs Assignment · 2025*
