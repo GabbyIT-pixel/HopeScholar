@@ -1,3 +1,3 @@
-/* cache.js — API Response Caching (Bonus: Performance) | HopeScholar */
+/* cache.js — API response caching (Bonus: Performance) */
 'use strict';
-const Cache={TTL_MS:60*60*1000,get(k){try{const r=localStorage.getItem(`hs_cache_${k}`);if(!r)return null;const{data,timestamp}=JSON.parse(r);if(Date.now()-timestamp>this.TTL_MS){this.remove(k);return null;}return data;}catch{return null;}},set(k,d){try{localStorage.setItem(`hs_cache_${k}`,JSON.stringify({data:d,timestamp:Date.now()}));}catch{}},remove(k){try{localStorage.removeItem(`hs_cache_${k}`);}catch{}},clear(){try{Object.keys(localStorage).filter(k=>k.startsWith('hs_cache_')).forEach(k=>localStorage.removeItem(k));}catch{}}};
+const Cache={TTL:60*60*1000,get(k){try{const r=localStorage.getItem('hs_c_'+k);if(!r)return null;const{d,t}=JSON.parse(r);if(Date.now()-t>this.TTL){localStorage.removeItem('hs_c_'+k);return null;}return d;}catch{return null;}},set(k,d){try{localStorage.setItem('hs_c_'+k,JSON.stringify({d,t:Date.now()}));}catch{}},clear(){try{Object.keys(localStorage).filter(k=>k.startsWith('hs_c_')).forEach(k=>localStorage.removeItem(k));}catch{}}};
