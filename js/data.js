@@ -23,6 +23,20 @@ const SCHOLARSHIPS = [
   },
   {
     id: 2,
+    name: 'Kepler College',
+    shortName: 'Kepler',
+    logo: 'https://kepler.org/wp-content/uploads/2021/05/kepler-logo.png',
+    country: 'Rwanda', flag: '🇷🇼', city: 'Kigali',
+    region: 'africa', category: 'mastercard', level: 'Undergraduate',
+    funding: 'Fully Funded — Mastercard Foundation',
+    focus: ['Liberal Arts', 'Leadership', 'Professional Development', 'Community Impact'],
+    description: 'Mastercard Foundation partner. Kepler College in Kigali offers an innovative blended-learning degree program specifically designed for refugees and underserved Rwandan students.',
+    link: 'https://kepler.org',
+    tags: ['Mastercard', 'Refugees', 'Leadership', 'Rwanda'],
+  },
+
+  {
+    id: 2,
     name: 'African Leadership Academy',
     shortName: 'ALA',
     logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/89/African_Leadership_Academy_logo.png/200px-African_Leadership_Academy_logo.png',

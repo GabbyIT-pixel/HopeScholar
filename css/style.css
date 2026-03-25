@@ -566,3 +566,16 @@ a{color:inherit;text-decoration:none;}
 .finder-results-title  { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); }
 .finder-back-btn { padding: 8px 18px; border: 1.5px solid var(--gray-200); border-radius: var(--r-sm); font-size: .855rem; font-weight: 600; color: var(--gray-600); transition: all 180ms; }
 .finder-back-btn:hover { border-color: var(--primary); color: var(--primary-dk); }
+
+/* ── Back to home link in sidebar ──────────────────────────── */
+.back-home-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  font-size: .8rem; font-weight: 600;
+  color: rgba(255,255,255,.35);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: color .2s, background .2s;
+  flex-shrink: 0;
+}
+.back-home-link:hover { color: rgba(255,255,255,.7); background: rgba(255,255,255,.04); }
+.back-home-link svg   { width: 14px; height: 14px; }
