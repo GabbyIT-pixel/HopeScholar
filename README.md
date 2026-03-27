@@ -1,5 +1,6 @@
-# 🌍 HopeScholar
-### *Connecting talented African students to fully funded education worldwide*
+# HopeScholar
+
+### _Connecting talented African students to fully funded education worldwide_
 
 > Live at **[gabrielmugisha.tech](https://gabrielmugisha.tech)**
 
@@ -8,36 +9,38 @@
 
 ---
 
-## 🎯 The Problem We Solve
+## The Problem We Solve
+
 Millions of talented African students from low-income families never access higher education — not because they lack ability, but because they lack information about 100% free opportunities. HopeScholar puts all those opportunities in one place.
 
 ---
 
-## 🌟 Features
+## Features
 
-| Tab | Content |
-|---|---|
-| 🎓 Scholarships | 51 curated scholarships with logos, city, level, funding type — click for full details modal |
-| 🏫 Universities | Live Hipolabs API data across 12+ African countries |
-| 🌍 Countries | All 54 sovereign African nations — click to find universities |
-| 📰 Opportunities | RSS news + guaranteed static scholarship opportunities (always works) |
-| 🔖 Saved | Bookmark anything — persists in localStorage |
+| Tab           | Content                                                                                      |
+| ------------- | -------------------------------------------------------------------------------------------- |
+| Scholarships  | 51 curated scholarships with logos, city, level, funding type — click for full details modal |
+| Universities  | Live Hipolabs API data across 12+ African countries                                          |
+| Countries     | All 54 sovereign African nations — click to find universities                                |
+| Opportunities | RSS news + guaranteed static scholarship opportunities (always works)                        |
+| Saved         | Bookmark anything — persists in localStorage                                                 |
 
 ---
 
-## 🌐 APIs Used
+## APIs Used
 
-| API | Purpose | Key Required |
-|---|---|---|
-| [Hipolabs Universities API](http://universities.hipolabs.com) | Live university data | ❌ None |
-| [REST Countries v3](https://restcountries.com) | African country data with flags | ❌ None |
-| [RSS2JSON](https://rss2json.com) | Live news feed | ❌ None |
+| API                                                           | Purpose                         | Key Required |
+| ------------------------------------------------------------- | ------------------------------- | ------------ |
+| [Hipolabs Universities API](http://universities.hipolabs.com) | Live university data            | No Key       |
+| [REST Countries v3](https://restcountries.com)                | African country data with flags | No Key       |
+| [RSS2JSON](https://rss2json.com)                              | Live news feed                  | No Key       |
 
 **No API keys** — eliminates any risk of credential exposure.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
+
 ```
 HopeScholar/
 ├── index.html           App — 5 tabs, sidebar, footer, modal
@@ -62,8 +65,9 @@ HopeScholar/
 
 ---
 
-## 🏆 Bonus Features
-1. **Caching** (`cache.js`) — 1-hour localStorage TTL, toast shows "Loaded from cache ⚡"
+## Bonus Features
+
+1. **Caching** (`cache.js`) — 1-hour localStorage TTL, toast shows "Loaded from cache"
 2. **XSS Protection** (`utils.js`) — `escapeHtml()` on every API string
 3. **Input Validation** (`utils.js`) — `validateInput()` strips injection chars
 4. **User Preferences** (`prefs.js`) — restores last selected filters on revisit
@@ -72,7 +76,8 @@ HopeScholar/
 
 ---
 
-## 🚀 Running Locally
+## Running Locally
+
 ```bash
 git clone https://github.com/GabbyIT-pixel/HopeScholar.git
 cd HopeScholar
@@ -81,7 +86,8 @@ open index.html          # or: npx serve .
 
 ---
 
-## ☁️ Deployment
+## Deployment
+
 ```bash
 # Web01
 ssh -i ~/.ssh/school ubuntu@54.227.215.118
@@ -100,7 +106,8 @@ curl https://gabrielmugisha.tech/health  # LB OK
 
 ---
 
-## 🔒 Security
+## Security
+
 - `escapeHtml()` — all API content sanitised before DOM insertion
 - `validateInput()` — user inputs sanitised before API calls
 - No API keys — zero credential exposure risk
@@ -109,5 +116,5 @@ curl https://gabrielmugisha.tech/health  # LB OK
 
 ---
 
-*African Leadership University · Web Infrastructure & APIs Assignment · 2025*
-*Credit: Hipo Labs · REST Countries · RSS2JSON · Mastercard Foundation · Plus Jakarta Sans*
+_African Leadership University · Web Infrastructure & APIs Assignment · 2025_
+_Credit: Hipo Labs · REST Countries · RSS2JSON · Mastercard Foundation · Plus Jakarta Sans_

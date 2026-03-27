@@ -15,57 +15,58 @@ const EXCLUDED = [
   'Melilla',
 ];
 
-const Countries = {data:[],loaded:false,
+const Countries = {
+  data: [], loaded: false,
 
-async load(){
-  if(this.loaded){this.render();return;}
-  clearError('country');showLoader('country');
-  const cached=Cache.get('africa_v2');
-  if(cached){this.data=cached;this.loaded=true;hideLoader('country');this.render();showToast('Loaded from cache ⚡');return;}
-  try{
-    const res=await fetchWithTimeout('https://restcountries.com/v3.1/region/africa?fields=name,flags,capital,population,subregion,cca2');
-    const json=await res.json();
-    if(!Array.isArray(json))throw new Error('Unexpected API response.');
+  async load() {
+    if (this.loaded) { this.render(); return; }
+    clearError('country'); showLoader('country');
+    const cached = Cache.get('africa_v2');
+    if (cached) { this.data = cached; this.loaded = true; hideLoader('country'); this.render(); showToast('Loaded from cache'); return; }
+    try {
+      const res = await fetchWithTimeout('https://restcountries.com/v3.1/region/africa?fields=name,flags,capital,population,subregion,cca2');
+      const json = await res.json();
+      if (!Array.isArray(json)) throw new Error('Unexpected API response.');
 
-    // Only keep sovereign/recognised African nations
-    const filtered = json
-      .filter(c => !EXCLUDED.includes(c.name.common) && !EXCLUDED.includes(c.name.official))
-      .filter(c => c.population > 0) // removes uninhabited territories
-      .sort((a,b)=>a.name.common.localeCompare(b.name.common));
+      // Only keep sovereign/recognised African nations
+      const filtered = json
+        .filter(c => !EXCLUDED.includes(c.name.common) && !EXCLUDED.includes(c.name.official))
+        .filter(c => c.population > 0) // removes uninhabited territories
+        .sort((a, b) => a.name.common.localeCompare(b.name.common));
 
-    Cache.set('africa_v2',filtered);
-    this.data=filtered;this.loaded=true;hideLoader('country');this.render();
-  }catch(e){hideLoader('country');showError('country',`Could not load countries: ${e.message}`);}
-},
+      Cache.set('africa_v2', filtered);
+      this.data = filtered; this.loaded = true; hideLoader('country'); this.render();
+    } catch (e) { hideLoader('country'); showError('country', `Could not load countries: ${e.message}`); }
+  },
 
-render(){
-  const grid=$('country-grid');
-  const search=validateInput($('country-search').value).toLowerCase();
-  const region=$('country-region').value;
-  const sort=$('country-sort').value;
-  let list=[...this.data];
-  if(search)list=list.filter(c=>c.name.common.toLowerCase().includes(search)||(c.capital?.[0]??'').toLowerCase().includes(search));
-  if(region)list=list.filter(c=>c.subregion===region);
-  if(sort==='name-asc')list.sort((a,b)=>a.name.common.localeCompare(b.name.common));
-  if(sort==='pop-desc')list.sort((a,b)=>b.population-a.population);
-  if(sort==='pop-asc')list.sort((a,b)=>a.population-b.population);
-  showStats('country',`${list.length} countr${list.length!==1?'ies':'y'} shown`);
-  if(!list.length){grid.innerHTML=emptyHtml('🌍','No countries found','Adjust your search or region filter.');return;}
-  grid.innerHTML=list.map(c=>this._card(c)).join('');
-},
+  render() {
+    const grid = $('country-grid');
+    const search = validateInput($('country-search').value).toLowerCase();
+    const region = $('country-region').value;
+    const sort = $('country-sort').value;
+    let list = [...this.data];
+    if (search) list = list.filter(c => c.name.common.toLowerCase().includes(search) || (c.capital?.[0] ?? '').toLowerCase().includes(search));
+    if (region) list = list.filter(c => c.subregion === region);
+    if (sort === 'name-asc') list.sort((a, b) => a.name.common.localeCompare(b.name.common));
+    if (sort === 'pop-desc') list.sort((a, b) => b.population - a.population);
+    if (sort === 'pop-asc') list.sort((a, b) => a.population - b.population);
+    showStats('country', `${list.length} countr${list.length !== 1 ? 'ies' : 'y'} shown`);
+    if (!list.length) { grid.innerHTML = emptyHtml('C', 'No countries found', 'Adjust your search or region filter.'); return; }
+    grid.innerHTML = list.map(c => this._card(c)).join('');
+  },
 
-_card(c){
-  const cap=c.capital?.[0]??'N/A';
-  const flagHtml=c.flags?.png
-    ?`<img class="country-flag" src="${escapeHtml(c.flags.png)}" alt="Flag of ${escapeHtml(c.name.common)}" loading="lazy"/>`
-    :`<span style="font-size:2.2rem">🏳️</span>`;
-  const subregionTag=c.subregion
-    ?`<span class="tag tag-gold" style="width:fit-content">${escapeHtml(c.subregion)}</span>`
-    :'';
-  return`<article class="country-card"
-    onclick="Countries._onClick('${escapeHtml(c.name.common).replace(/'/g,"\\'")}',this)"
+  _card(c) {
+    const cap = c.capital?.[0] ?? 'N/A';
+    const flagHtml = c.flags?.png
+      ? `<img class="country-flag" src="${escapeHtml(c.flags.png)}" alt="Flag of ${escapeHtml(c.name.common)}" loading="lazy"/>`
+      : `<span style="font-size:2.2rem">-</span>`;
+    const subregionTag = c.subregion
+      ? `<span class="tag tag-gold" style="width:fit-content">${escapeHtml(c.subregion)}</span>`
+      : '';
+    return `<article class="country-card"
+    onclick="Countries._onClick('${escapeHtml(c.name.common).replace(/'/g, "\\'")}',this)"
     tabindex="0"
-    onkeydown="if(event.key==='Enter')Countries._onClick('${escapeHtml(c.name.common).replace(/'/g,"\\'")}',this)">
+    onkeydown="if(event.key==='Enter')Countries._onClick('${escapeHtml(c.name.common).replace(/'/g, "\\'")}',this)">
     ${flagHtml}
     <p class="country-name">${escapeHtml(c.name.common)}</p>
     <p class="country-capital">
@@ -78,25 +79,26 @@ _card(c){
     </p>
     ${subregionTag}
     <div class="country-cta">
-      🎓 Find universities
+      Find universities
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </div>
   </article>`;
-},
+  },
 
-_onClick(name){
-  switchTab('universities');
-  window._closeSidebar?.();
-  const sel=$('uni-country');
-  let opt=Array.from(sel.options).find(o=>o.value.toLowerCase()===name.toLowerCase());
-  if(!opt){opt=new Option(name,name);sel.appendChild(opt);}
-  sel.value=opt.value;
-  Universities.data=[];Universities.loaded=false;
-  Universities.load();
-}};
+  _onClick(name) {
+    switchTab('universities');
+    window._closeSidebar?.();
+    const sel = $('uni-country');
+    let opt = Array.from(sel.options).find(o => o.value.toLowerCase() === name.toLowerCase());
+    if (!opt) { opt = new Option(name, name); sel.appendChild(opt); }
+    sel.value = opt.value;
+    Universities.data = []; Universities.loaded = false;
+    Universities.load();
+  }
+};
 
-document.addEventListener('DOMContentLoaded',()=>{
-  $('country-search')?.addEventListener('input',debounce(()=>{if(Countries.loaded)Countries.render();},250));
-  $('country-region')?.addEventListener('change',()=>{if(Countries.loaded)Countries.render();});
-  $('country-sort')?.addEventListener('change',()=>{if(Countries.loaded)Countries.render();});
+document.addEventListener('DOMContentLoaded', () => {
+  $('country-search')?.addEventListener('input', debounce(() => { if (Countries.loaded) Countries.render(); }, 250));
+  $('country-region')?.addEventListener('change', () => { if (Countries.loaded) Countries.render(); });
+  $('country-sort')?.addEventListener('change', () => { if (Countries.loaded) Countries.render(); });
 });

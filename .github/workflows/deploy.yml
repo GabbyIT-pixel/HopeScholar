@@ -27,5 +27,5 @@ jobs:
           ssh -i ~/.ssh/school ubuntu@${{ secrets.WEB02_IP }} "sudo systemctl reload nginx"
       - name: Verify
         run: |
-          curl --fail http://${{ secrets.WEB01_IP }}/health && echo "Web01 ✅"
-          curl --fail http://${{ secrets.WEB02_IP }}/health && echo "Web02 ✅"
+          curl --fail http://${{ secrets.WEB01_IP }}/health && echo "Web01 OK"
+          curl --fail http://${{ secrets.WEB02_IP }}/health && echo "Web02 OK"
