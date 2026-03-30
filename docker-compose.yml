@@ -1,0 +1,110 @@
+# ============================================================
+# HopeScholar - Docker Compose Configuration
+# Multi-container setup with web servers and load balancer
+# ============================================================
+
+version: '3.8'
+
+services:
+  # Web Server 1
+  web01:
+    build: .
+    container_name: hopescholar-web01
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - hopescholar-net
+    labels:
+      - "hopescholar.role=webserver"
+      - "hopescholar.instance=01"
+
+  # Web Server 2
+  web02:
+    build: .
+    container_name: hopescholar-web02
+    ports:
+      - "8082:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - hopescholar-net
+    labels:
+      - "hopescholar.role=webserver"
+      - "hopescholar.instance=02"
+
+  # Load Balancer
+  loadbalancer:
+    image: nginx:alpine
+    container_name: hopescholar-lb
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Create a custom nginx.conf in same directory with upstream block
+      - ./nginx-lb.conf:/etc/nginx/nginx.conf:ro
+      # Uncomment and configure for SSL:
+      # - ./ssl/fullchain.pem:/etc/letsencrypt/fullchain.pem:ro
+      # - ./ssl/privkey.pem:/etc/letsencrypt/privkey.pem:ro
+    depends_on:
+      web01:
+        condition: service_healthy
+      web02:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - hopescholar-net
+    labels:
+      - "hopescholar.role=loadbalancer"
+
+networks:
+  hopescholar-net:
+    driver: bridge
+    name: hopescholar-network
+
+# ============================================================
+# USAGE INSTRUCTIONS
+# ============================================================
+#
+# Development / Local Testing:
+#   docker-compose up -d
+#   # Access at http://localhost (port 80)
+#
+# View logs:
+#   docker-compose logs -f
+#   docker-compose logs -f web01
+#   docker-compose logs -f web02
+#   docker-compose logs -f loadbalancer
+#
+# Scale web servers:
+#   docker-compose up -d --scale web01=2
+#
+# Stop and remove:
+#   docker-compose down
+#
+# Rebuild after code changes:
+#   docker-compose up -d --build
+#
+# Health checks:
+#   curl http://localhost:8081/health  # web01
+#   curl http://localhost:8082/health  # web02
+#   curl http://localhost/health       # through load balancer
+#
+# SSL Configuration:
+#   1. Generate SSL certificates with Let's Encrypt
+#   2. Create ./ssl directory and add certificates
+#   3. Uncomment volume mounts in loadbalancer service
+#   4. Update nginx.conf to use HTTPS ports
+#
+# ============================================================

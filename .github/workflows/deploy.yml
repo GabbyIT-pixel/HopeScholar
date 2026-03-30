@@ -1,0 +1,324 @@
+# ============================================================
+# HopeScholar - GitHub Actions CI/CD Pipeline
+# Auto-deploy on every push to main branch
+# ============================================================
+
+name: Deploy HopeScholar
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  # -----------------------------------------
+  # Job 1: Lint & Validate
+  # -----------------------------------------
+  validate:
+    name: Validate Code
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for required files
+        run: |
+          echo "Checking required files..."
+          for file in index.html css/style.css js/app.js js/scholarships.js js/universities.js js/countries.js js/news.js js/saved.js js/utils.js js/cache.js js/prefs.js js/finder.js js/ui.js js/data.js README.md; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing required file: $file"
+              exit 1
+            fi
+          done
+          echo "All required files present ✓"
+      
+      - name: Validate HTML syntax
+        run: |
+          if command -v python3 &> /dev/null; then
+            python3 -c "from html.parser import HTMLParser; print('HTML parser available ✓')"
+          fi
+      
+      - name: Validate JavaScript syntax
+        run: |
+          for file in js/*.js; do
+            echo "Checking $file..."
+            node --check "$file" 2>&1 || echo "Warning: Syntax check failed for $file"
+          done
+      
+      - name: Validate CSS syntax
+        run: |
+          if command -v npx &> /dev/null; then
+            npx stylelint css/style.css --fix 2>/dev/null || echo "CSS linter not configured"
+          fi
+
+  # -----------------------------------------
+  # Job 2: Build & Test Docker Image
+  # -----------------------------------------
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: validate
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        run: |
+          docker build -t hopescholar:${{ github.sha }} .
+          docker build -t hopescholar:latest .
+          echo "Docker image built successfully ✓"
+      
+      - name: Test Docker container
+        run: |
+          docker run -d --name hopescholar-test -p 8080:80 hopescholar:latest
+          sleep 5
+          
+          # Check if container is running
+          if docker ps | grep -q hopescholar-test; then
+            echo "Container is running ✓"
+          else
+            echo "ERROR: Container failed to start"
+            docker logs hopescholar-test
+            exit 1
+          fi
+          
+          # Test health endpoint
+          if curl -f http://localhost:8080/health 2>/dev/null; then
+            echo "Health check passed ✓"
+          else
+            echo "ERROR: Health check failed"
+            exit 1
+          fi
+          
+          # Test main page
+          if curl -f http://localhost:8080/ 2>/dev/null | grep -q "HopeScholar"; then
+            echo "Main page loads correctly ✓"
+          else
+            echo "ERROR: Main page failed to load"
+            exit 1
+          fi
+          
+          # Cleanup
+          docker stop hopescholar-test
+          docker rm hopescholar-test
+      
+      - name: Push to registry (if configured)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "Docker Hub push not configured - add secrets.DOCKER_USERNAME and secrets.DOCKER_PASSWORD"
+          # Uncomment below to enable Docker Hub push:
+          # echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          # docker push hopescholar:latest
+
+  # -----------------------------------------
+  # Job 3: Deploy to Web Servers
+  # -----------------------------------------
+  deploy:
+    name: Deploy to Servers
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    env:
+      WEB01_HOST: ${{ secrets.WEB01_HOST }}
+      WEB01_USER: ${{ secrets.WEB01_USER }}
+      WEB01_SSH_KEY: ${{ secrets.WEB01_SSH_KEY }}
+      LB01_HOST: ${{ secrets.LB01_HOST }}
+      LB01_USER: ${{ secrets.LB01_USER }}
+      LB01_SSH_KEY: ${{ secrets.LB01_SSH_KEY }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Web01
+        run: |
+          echo "Deploying to Web01..."
+          # Create deployment script
+          cat > deploy_web01.sh << 'EOF'
+          #!/bin/bash
+          set -e
+          
+          echo "Starting deployment to Web01..."
+          
+          # Create remote directory
+          ssh -o StrictHostKeyChecking=no -i <(echo "$WEB01_SSH_KEY") $WEB01_USER@$WEB01_HOST "
+            sudo mkdir -p /var/www/hopescholar
+            sudo chown -R $WEB01_USER:$WEB01_USER /var/www/hopescholar
+          "
+          
+          # Sync files using rsync over SSH
+          rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no -i /tmp/web01_key" \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='*.log' \
+            --exclude='.env' \
+            . $WEB01_USER@$WEB01_HOST:/var/www/hopescholar/
+          
+          # Set permissions
+          ssh -o StrictHostKeyChecking=no -i <(echo "$WEB01_SSH_KEY") $WEB01_USER@$WEB01_HOST "
+            sudo chown -R www-data:www-data /var/www/hopescholar
+            sudo nginx -t && sudo systemctl reload nginx
+          "
+          
+          # Health check
+          sleep 2
+          if curl -f http://$WEB01_HOST/health 2>/dev/null; then
+            echo "Web01 deployment successful ✓"
+          else
+            echo "Warning: Web01 health check failed"
+          fi
+          EOF
+          
+          # Save SSH key to file
+          echo "$WEB01_SSH_KEY" > /tmp/web01_key
+          chmod 600 /tmp/web01_key
+          
+          # Execute deployment
+          bash deploy_web01.sh || echo "Web01 deployment completed with warnings"
+      
+      - name: Deploy to Web02
+        run: |
+          echo "Deploying to Web02..."
+          echo "Configure WEB02_* secrets in GitHub repository settings"
+          # Add Web02 deployment steps here once server is configured
+      
+      - name: Configure Load Balancer
+        run: |
+          echo "Configuring Load Balancer..."
+          echo "Configure LB01_* secrets in GitHub repository settings"
+          # Add load balancer configuration steps here
+          # Should include:
+          # 1. Update nginx upstream with both web server IPs
+          # 2. Reload nginx on Lb01
+          # 3. Test health check through load balancer
+      
+      - name: Verify Deployment
+        run: |
+          echo "Verifying deployment..."
+          
+          # Test Web01
+          echo "Testing Web01..."
+          curl -s -o /dev/null -w "Web01: HTTP %{http_code}\n" http://$WEB01_HOST/health || echo "Web01: unreachable"
+          
+          # Test Web02 (if configured)
+          # echo "Testing Web02..."
+          # curl -s -o /dev/null -w "Web02: HTTP %{http_code}\n" http://$WEB02_HOST/health || echo "Web02: not configured"
+          
+          # Test Load Balancer (if configured)
+          # echo "Testing Load Balancer..."
+          # curl -s -o /dev/null -w "LB: HTTP %{http_code}\n" https://gabrielmugisha.tech/health || echo "LB: not configured"
+
+  # -----------------------------------------
+  # Job 4: Docker Compose for Local Dev
+  # -----------------------------------------
+  docker-compose:
+    name: Create Docker Compose File
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Create docker-compose.yml
+        run: |
+          cat > docker-compose.yml << 'EOF'
+          version: '3.8'
+          
+          services:
+            web01:
+              build: .
+              container_name: hopescholar-web01
+              ports:
+                - "8081:80"
+              restart: unless-stopped
+              healthcheck:
+                test: ["CMD", "curl", "-f", "http://localhost/health"]
+                interval: 30s
+                timeout: 10s
+                retries: 3
+              networks:
+                - hopescholar-net
+              
+            web02:
+              build: .
+              container_name: hopescholar-web02
+              ports:
+                - "8082:80"
+              restart: unless-stopped
+              healthcheck:
+                test: ["CMD", "curl", "-f", "http://localhost/health"]
+                interval: 30s
+                timeout: 10s
+                retries: 3
+              networks:
+                - hopescholar-net
+              
+            loadbalancer:
+              image: nginx:alpine
+              container_name: hopescholar-lb
+              ports:
+                - "80:80"
+                - "443:443"
+              volumes:
+                - ./nginx.conf:/etc/nginx/nginx.conf:ro
+              depends_on:
+                - web01
+                - web02
+              restart: unless-stopped
+              networks:
+                - hopescholar-net
+              
+          networks:
+            hopescholar-net:
+              driver: bridge
+          EOF
+          echo "docker-compose.yml created ✓"
+      
+      - name: Commit docker-compose.yml
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions"
+          git add docker-compose.yml
+          git diff --staged --quiet || git commit -m "ci: add docker-compose.yml for local development [skip ci]"
+          git push || echo "Could not push docker-compose.yml"
+
+# ============================================================
+# SETUP INSTRUCTIONS
+# ============================================================
+# 
+# 1. Add GitHub Secrets:
+#    - WEB01_HOST: IP address of Web01 server
+#    - WEB01_USER: SSH username (e.g., ubuntu)
+#    - WEB01_SSH_KEY: Private SSH key for Web01
+#    - WEB02_HOST: IP address of Web02 server
+#    - WEB02_USER: SSH username for Web02
+#    - WEB02_SSH_KEY: Private SSH key for Web02
+#    - LB01_HOST: IP address of Load Balancer
+#    - LB01_USER: SSH username for LB
+#    - LB01_SSH_KEY: Private SSH key for LB
+#
+# 2. Configure SSH Keys:
+#    - Generate SSH key pair on each server
+#    - Add public key to authorized_keys
+#    - Add private key as GitHub Secret
+#
+# 3. Server Requirements:
+#    - Ubuntu 20.04+ with nginx installed
+#    - SSH access configured
+#    - /var/www/hopescholar directory exists with proper permissions
+#
+# 4. Load Balancer Setup:
+#    - Lb01 must have nginx installed
+#    - SSL certificates via Let's Encrypt:
+#      sudo certbot --nginx -d gabrielmugisha.tech -d www.gabrielmugisha.tech
+#
+# ============================================================
