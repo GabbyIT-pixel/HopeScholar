@@ -1,62 +1,153 @@
-/* universities.js — HopeScholar | Hipolabs API with proxy fallback */
-'use strict';
-const Universities = {
-  data: [], loaded: false, _filtered: [],
+/**
+ * Universities Module - Fetches and displays university data from Hipolabs API
+ *
+ * This module connects to the Hipolabs Universities API to show universities
+ * across African countries. It includes smart fallbacks in case the main API
+ * is down or blocked by CORS.
+ *
+ * Features:
+ * - Fetches universities by country
+ * - Caches results for 1 hour (performance boost)
+ * - Falls back to proxy URLs if direct API fails
+ * - Search and sort functionality
+ * - Save universities to bookmarks
+ */
+"use strict";
 
+const Universities = {
+  // Store the university data and state
+  data: [],
+  loaded: false,
+  _filtered: [],
+
+  /**
+   * Try to fetch university data with multiple fallback URLs
+   * Sometimes the direct API might be blocked, so we try HTTPS, then HTTP, then a proxy
+   */
   async _fetchData(country) {
     const enc = encodeURIComponent(validateInput(country, 50));
+
+    // List of URLs to try - if one fails, we move to the next
     const urls = [
-      `https://universities.hipolabs.com/search?country=${enc}`,
-      `http://universities.hipolabs.com/search?country=${enc}`,
-      `https://api.allorigins.win/raw?url=${encodeURIComponent('http://universities.hipolabs.com/search?country=' + enc)}`,
+      `https://universities.hipolabs.com/search?country=${enc}`, // Try HTTPS first
+      `http://universities.hipolabs.com/search?country=${enc}`, // Fallback to HTTP
+      `https://api.allorigins.win/raw?url=${encodeURIComponent("http://universities.hipolabs.com/search?country=" + enc)}`, // CORS proxy as last resort
     ];
+
+    // Try each URL until one works
     for (const url of urls) {
       try {
         const res = await fetchWithTimeout(url, 9000);
         const json = await res.json();
         if (Array.isArray(json) && json.length >= 0) return json;
-      } catch { continue; }
+      } catch {
+        // If this URL failed, try the next one
+        continue;
+      }
     }
-    throw new Error('Cannot connect to the universities API. Please check your internet connection and try again.');
+
+    // If all URLs failed, show a helpful error message
+    throw new Error(
+      "Cannot connect to the universities API. Please check your internet connection and try again.",
+    );
   },
 
+  /**
+   * Main load function - called when user switches to Universities tab
+   * Checks cache first, then fetches from API if needed
+   */
   async load() {
-    const country = $('uni-country').value;
-    this.data = []; this.loaded = false;
-    clearError('uni'); showLoader('uni');
+    const country = $("uni-country").value;
+    this.data = [];
+    this.loaded = false;
+    clearError("uni");
+    showLoader("uni");
+
+    // Create a cache key based on the country
     const ck = `uni_${country}`;
     const cached = Cache.get(ck);
-    if (cached) { this.data = cached; this.loaded = true; hideLoader('uni'); this.render(); showToast('Loaded from cache'); return; }
+
+    // If we have cached data, use it instead of making an API call
+    if (cached) {
+      this.data = cached;
+      this.loaded = true;
+      hideLoader("uni");
+      this.render();
+      showToast("Loaded from cache");
+      return;
+    }
+
+    // No cache - fetch from API
     try {
       const json = await this._fetchData(country);
-      Cache.set(ck, json);
-      this.data = json; this.loaded = true; hideLoader('uni'); this.render();
-    } catch (e) { hideLoader('uni'); showError('uni', e.message); }
+      Cache.set(ck, json); // Save to cache for next time
+      this.data = json;
+      this.loaded = true;
+      hideLoader("uni");
+      this.render();
+    } catch (e) {
+      // Something went wrong - show error to user
+      hideLoader("uni");
+      showError("uni", e.message);
+    }
   },
 
   render() {
-    const grid = $('uni-grid');
-    const search = validateInput($('uni-search').value).toLowerCase();
-    const sort = $('uni-sort').value;
+    const grid = $("uni-grid");
+    const search = validateInput($("uni-search").value).toLowerCase();
+    const sort = $("uni-sort").value;
     let list = [...this.data];
-    if (search) list = list.filter(u => u.name.toLowerCase().includes(search) || (u.domains || []).join(' ').toLowerCase().includes(search));
-    list.sort((a, b) => sort === 'name-asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+    if (search)
+      list = list.filter(
+        (u) =>
+          u.name.toLowerCase().includes(search) ||
+          (u.domains || []).join(" ").toLowerCase().includes(search),
+      );
+    list.sort((a, b) =>
+      sort === "name-asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name),
+    );
     this._filtered = list;
-    showStats('uni', `${list.length} universit${list.length !== 1 ? 'ies' : 'y'} in ${$('uni-country').value}`);
-    if (!list.length) { grid.innerHTML = emptyHtml('U', 'No universities found', 'Try a different search or select another country.'); return; }
-    grid.innerHTML = list.map((u, i) => this._card(u, i)).join('');
+    showStats(
+      "uni",
+      `${list.length} universit${list.length !== 1 ? "ies" : "y"} in ${$("uni-country").value}`,
+    );
+    if (!list.length) {
+      grid.innerHTML = emptyHtml(
+        "U",
+        "No universities found",
+        "Try a different search or select another country.",
+      );
+      return;
+    }
+    grid.innerHTML = list.map((u, i) => this._card(u, i)).join("");
   },
 
   _initial(name) {
-    return (name.split(' ').filter(w => w.length > 2).slice(0, 3).map(w => w[0] || '').join('').toUpperCase().slice(0, 3)) || name.slice(0, 3).toUpperCase();
+    return (
+      name
+        .split(" ")
+        .filter((w) => w.length > 2)
+        .slice(0, 3)
+        .map((w) => w[0] || "")
+        .join("")
+        .toUpperCase()
+        .slice(0, 3) || name.slice(0, 3).toUpperCase()
+    );
   },
 
   _card(u, i) {
     const url = u.web_pages?.[0] ?? null;
-    const domain = u.domains?.[0] ?? '—';
+    const domain = u.domains?.[0] ?? "—";
     const key = `uni-${u.name}`;
     const isSaved = Saved.has(key);
-    const sd = JSON.stringify({ name: u.name, country: u.country, url, domain }).replace(/"/g, '&quot;');
+    const sd = JSON.stringify({
+      name: u.name,
+      country: u.country,
+      url,
+      domain,
+    }).replace(/"/g, "&quot;");
     const init = this._initial(u.name);
     return `<article class="uni-card" onclick="Universities.openModal(${i})">
     <div class="card-logo-area">
@@ -70,8 +161,8 @@ const Universities = {
     <div class="card-bottom">
             <span class="tag tag-green">${escapeHtml(u.country)}</span>
       <div style="display:flex;align-items:center;gap:8px">
-        <button class="bm-btn${isSaved ? ' saved' : ''}" onclick="event.stopPropagation();Saved.toggle('${escapeHtml(key).replace(/'/g, "\\'")}',${sd},'university')" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="${isSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        <button class="bm-btn${isSaved ? " saved" : ""}" onclick="event.stopPropagation();Saved.toggle('${escapeHtml(key).replace(/'/g, "\\'")}',${sd},'university')" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="${isSaved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
         </button>
         <span class="card-link-btn">Details <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
@@ -80,11 +171,12 @@ const Universities = {
   },
 
   openModal(i) {
-    const u = this._filtered[i]; if (!u) return;
+    const u = this._filtered[i];
+    if (!u) return;
     const url = u.web_pages?.[0] ?? null;
-    const allDomains = (u.domains || []).join(', ') || '—';
+    const allDomains = (u.domains || []).join(", ") || "—";
     const init = this._initial(u.name);
-    $('modal-body').innerHTML = `
+    $("modal-body").innerHTML = `
     <div class="modal-header">
       <div class="modal-logo-wrap"><span class="modal-logo-text">${escapeHtml(init)}</span></div>
       <div class="modal-header-text">
@@ -95,18 +187,31 @@ const Universities = {
     <div class="modal-content">
       <div class="modal-section"><p class="modal-label">Country</p><p class="modal-value">${escapeHtml(u.country)}</p></div>
       <div class="modal-section"><p class="modal-label">Web Domain(s)</p><p class="modal-value">${escapeHtml(allDomains)}</p></div>
-      ${url ? `<div class="modal-section"><p class="modal-label">Official Website</p><p class="modal-value"><a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="color:var(--primary-dk);font-weight:600;text-decoration:underline">${escapeHtml(url)}</a></p></div>` : ''}
+      ${url ? `<div class="modal-section"><p class="modal-label">Official Website</p><p class="modal-value"><a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="color:var(--primary-dk);font-weight:600;text-decoration:underline">${escapeHtml(url)}</a></p></div>` : ""}
       <div class="modal-actions">
         ${url ? `<a class="modal-apply-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Visit Official University Website</a>` : `<span style="padding:14px;background:var(--gray-100);color:var(--gray-400);border-radius:8px;text-align:center;display:block">No website available</span>`}
       </div>
     </div>`;
     openModal();
-  }
+  },
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  $('uni-fetch-btn')?.addEventListener('click', () => Universities.load());
-  $('uni-search')?.addEventListener('input', debounce(() => { if (Universities.loaded) Universities.render(); }, 250));
-  $('uni-sort')?.addEventListener('change', () => { if (Universities.loaded) Universities.render(); });
-  $('uni-country')?.addEventListener('change', () => { Universities.data = []; Universities.loaded = false; $('uni-grid').innerHTML = ''; hideEl($('uni-stats')); clearError('uni'); });
+document.addEventListener("DOMContentLoaded", () => {
+  $("uni-fetch-btn")?.addEventListener("click", () => Universities.load());
+  $("uni-search")?.addEventListener(
+    "input",
+    debounce(() => {
+      if (Universities.loaded) Universities.render();
+    }, 250),
+  );
+  $("uni-sort")?.addEventListener("change", () => {
+    if (Universities.loaded) Universities.render();
+  });
+  $("uni-country")?.addEventListener("change", () => {
+    Universities.data = [];
+    Universities.loaded = false;
+    $("uni-grid").innerHTML = "";
+    hideEl($("uni-stats"));
+    clearError("uni");
+  });
 });

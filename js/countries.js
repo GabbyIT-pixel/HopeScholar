@@ -1,7 +1,23 @@
-/* countries.js — HopeScholar | REST Countries API */
+/**
+ * Countries Module - African Countries from REST Countries API
+ * 
+ * This module fetches data about all 54 African countries from the
+ * REST Countries API. It filters out non-sovereign territories and
+ * presents countries with their flags, capitals, and population.
+ * 
+ * Features:
+ * - Shows only sovereign African nations (excludes territories)
+ * - Displays flags, capitals, and population data
+ * - Search by country name or capital
+ * - Filter by region (West Africa, East Africa, etc.)
+ * - Sort alphabetically or by population
+ */
 'use strict';
 
-/* Non-sovereign territories to exclude from the list */
+/* 
+ * These are territories that belong to other countries
+ * We exclude them to show only independent African nations
+ */
 const EXCLUDED = [
   'British Indian Ocean Territory',
   'French Southern Territories',
