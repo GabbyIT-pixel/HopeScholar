@@ -1,30 +1,15 @@
-/**
- * News Module - Scholarship Opportunities from RSS Feeds
- *
- * This module fetches scholarship news from RSS feeds and displays them.
- * It has a clever fallback system: if the RSS feeds fail, it shows
- * curated static scholarship opportunities instead. This ensures users
- * ALWAYS see useful content even when external APIs are down.
- *
- * Features:
- * - Fetches from multiple RSS sources
- * - 1-hour caching for performance
- * - Static fallback data (always works)
- * - Search/filter by keywords
- */
 "use strict";
 
 const News = {
   data: [],
   current: "scholarship Africa",
 
-  // RSS feeds to fetch opportunities from
   FEEDS: [
     "https://www.scidev.net/sub-saharan-africa/feed/",
     "https://www.universityworldnews.com/rss.php",
   ],
 
-  // Static opportunities - these show even if RSS fails
+  // Fallback when RSS fails
   STATIC: [
     {
       title: "Mastercard Foundation Scholars Program 2025 — Apply Now",

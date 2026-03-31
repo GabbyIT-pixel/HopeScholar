@@ -1,23 +1,6 @@
-/**
- * Countries Module - African Countries from REST Countries API
- * 
- * This module fetches data about all 54 African countries from the
- * REST Countries API. It filters out non-sovereign territories and
- * presents countries with their flags, capitals, and population.
- * 
- * Features:
- * - Shows only sovereign African nations (excludes territories)
- * - Displays flags, capitals, and population data
- * - Search by country name or capital
- * - Filter by region (West Africa, East Africa, etc.)
- * - Sort alphabetically or by population
- */
 'use strict';
 
-/* 
- * These are territories that belong to other countries
- * We exclude them to show only independent African nations
- */
+// Non-sovereign territories to exclude
 const EXCLUDED = [
   'British Indian Ocean Territory',
   'French Southern Territories',
@@ -44,10 +27,9 @@ const Countries = {
       const json = await res.json();
       if (!Array.isArray(json)) throw new Error('Unexpected API response.');
 
-      // Only keep sovereign/recognised African nations
       const filtered = json
         .filter(c => !EXCLUDED.includes(c.name.common) && !EXCLUDED.includes(c.name.official))
-        .filter(c => c.population > 0) // removes uninhabited territories
+        .filter(c => c.population > 0)
         .sort((a, b) => a.name.common.localeCompare(b.name.common));
 
       Cache.set('africa_v2', filtered);

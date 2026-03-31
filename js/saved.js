@@ -1,24 +1,8 @@
-/**
- * Saved Module - Bookmark System using localStorage
- *
- * This module lets users save scholarships and universities to their
- * personal list. The data is stored in the browser's localStorage so
- * it persists even after closing the browser.
- *
- * Features:
- * - Save/unsave scholarships and universities with one click
- * - Persist saved items across browser sessions
- * - Show saved count badge in navigation
- * - View all saved items in the "Saved" tab
- * - Remove items with smooth animation
- */
 "use strict";
 
-// The key we use to store saved items in localStorage
 const SK = "hs_saved_v2";
 
 const Saved = {
-  // Object to hold all saved items in memory
   items: {},
   init() {
     try {

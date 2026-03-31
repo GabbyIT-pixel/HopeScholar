@@ -1,21 +1,17 @@
-/* finder.js — Study Finder | HopeScholar */
 "use strict";
 
 const Finder = {
   selections: { level: null, subject: null, region: null, funding: null },
 
   init() {
-    // Wire option buttons
     document.querySelectorAll(".finder-options").forEach((group) => {
       group.querySelectorAll(".finder-opt").forEach((btn) => {
         btn.addEventListener("click", () => {
-          // Deselect siblings
           group
             .querySelectorAll(".finder-opt")
             .forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
-          // Store selection
-          const groupId = group.id; // e.g. finder-level
+          const groupId = group.id;
           const key = groupId.replace("finder-", "");
           this.selections[key] = btn.dataset.val;
         });
@@ -29,11 +25,8 @@ const Finder = {
 
   search() {
     const { level, subject, region, funding } = this.selections;
-
-    // Filter scholarships based on selections
     let results = [...SCHOLARSHIPS];
 
-    // Filter by level
     if (level && level !== "") {
       results = results.filter((s) => {
         const l = s.level.toLowerCase();
@@ -58,7 +51,6 @@ const Finder = {
       });
     }
 
-    // Filter by subject
     if (subject && subject !== "") {
       results = results.filter((s) => {
         const focus = s.focus.join(" ").toLowerCase();
@@ -119,17 +111,15 @@ const Finder = {
           "Any Discipline": [],
         };
         const keywords = subjectMap[subject] || [];
-        if (keywords.length === 0) return true; // Any discipline
+        if (keywords.length === 0) return true;
         return keywords.some((kw) => combined.includes(kw));
       });
     }
 
-    // Filter by region
     if (region && region !== "") {
       results = results.filter((s) => s.region === region);
     }
 
-    // Filter by funding type
     if (funding && funding !== "") {
       results = results.filter((s) => s.category === funding);
     }

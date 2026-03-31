@@ -1,61 +1,33 @@
-/**
- * Universities Module - Fetches and displays university data from Hipolabs API
- *
- * This module connects to the Hipolabs Universities API to show universities
- * across African countries. It includes smart fallbacks in case the main API
- * is down or blocked by CORS.
- *
- * Features:
- * - Fetches universities by country
- * - Caches results for 1 hour (performance boost)
- * - Falls back to proxy URLs if direct API fails
- * - Search and sort functionality
- * - Save universities to bookmarks
- */
 "use strict";
 
 const Universities = {
-  // Store the university data and state
   data: [],
   loaded: false,
   _filtered: [],
 
-  /**
-   * Try to fetch university data with multiple fallback URLs
-   * Sometimes the direct API might be blocked, so we try HTTPS, then HTTP, then a proxy
-   */
+  // Try multiple URLs in case one is blocked
   async _fetchData(country) {
     const enc = encodeURIComponent(validateInput(country, 50));
 
-    // List of URLs to try - if one fails, we move to the next
     const urls = [
-      `https://universities.hipolabs.com/search?country=${enc}`, // Try HTTPS first
-      `http://universities.hipolabs.com/search?country=${enc}`, // Fallback to HTTP
-      `https://api.allorigins.win/raw?url=${encodeURIComponent("http://universities.hipolabs.com/search?country=" + enc)}`, // CORS proxy as last resort
+      `https://universities.hipolabs.com/search?country=${enc}`,
+      `http://universities.hipolabs.com/search?country=${enc}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent("http://universities.hipolabs.com/search?country=" + enc)}`,
     ];
 
-    // Try each URL until one works
     for (const url of urls) {
       try {
         const res = await fetchWithTimeout(url, 9000);
         const json = await res.json();
         if (Array.isArray(json) && json.length >= 0) return json;
       } catch {
-        // If this URL failed, try the next one
         continue;
       }
     }
 
-    // If all URLs failed, show a helpful error message
-    throw new Error(
-      "Cannot connect to the universities API. Please check your internet connection and try again.",
-    );
+    throw new Error("Cannot connect to the universities API.");
   },
 
-  /**
-   * Main load function - called when user switches to Universities tab
-   * Checks cache first, then fetches from API if needed
-   */
   async load() {
     const country = $("uni-country").value;
     this.data = [];
@@ -63,11 +35,9 @@ const Universities = {
     clearError("uni");
     showLoader("uni");
 
-    // Create a cache key based on the country
     const ck = `uni_${country}`;
     const cached = Cache.get(ck);
 
-    // If we have cached data, use it instead of making an API call
     if (cached) {
       this.data = cached;
       this.loaded = true;
@@ -77,16 +47,14 @@ const Universities = {
       return;
     }
 
-    // No cache - fetch from API
     try {
       const json = await this._fetchData(country);
-      Cache.set(ck, json); // Save to cache for next time
+      Cache.set(ck, json);
       this.data = json;
       this.loaded = true;
       hideLoader("uni");
       this.render();
     } catch (e) {
-      // Something went wrong - show error to user
       hideLoader("uni");
       showError("uni", e.message);
     }
