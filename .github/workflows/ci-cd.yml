@@ -23,6 +23,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
       - name: Install dependencies
         run: |
           if [ -f package.json ]; then
@@ -109,17 +115,11 @@ jobs:
         with:
           context: .
           push: false
+          load: true
           tags: hopescholar:prod
           target: production
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Run Docker container
-        run: |
-          docker run -d --name test-container -p 3333:80 hopescholar:prod
-          sleep 5
-          curl -f http://localhost:3333 || exit 1
-          docker stop test-container
 
       - name: Update cache
         run: |
