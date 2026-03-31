@@ -13,6 +13,11 @@
 
 Millions of talented African students from low-income families never access higher education — not because they lack ability, but because they lack information about 100% free opportunities. HopeScholar puts all those opportunities in one place.
 
+## Demo
+
+Watch a demo of HopeScholar in action: [Demo Video](https://youtu.be/22K1I6Pc_hE)
+
+
 ---
 
 ## Features
