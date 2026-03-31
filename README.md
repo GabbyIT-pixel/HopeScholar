@@ -2,7 +2,7 @@
 
 ### _Connecting talented African students to fully funded education worldwide_
 
-> Live at **[www.www.www.gabrielmugisha.tech](https://www.www.gabrielmugisha.tech)**
+> Live at ** https://www.gabrielmugisha.tech**
 
 **Author:** Gabriel Mugisha | African Leadership University (ALU) | Software Engineering
 **GitHub:** https://github.com/GabbyIT-pixel | **Email:** g.mugisha4@alustudent.com
@@ -15,7 +15,7 @@ Millions of talented African students from low-income families never access high
 
 ## Demo
 
-Watch a demo of HopeScholar in action: [Demo Video](https://youtu.be/22K1I6Pc_hE)
+Watch a demo of HopeScholar in action: (https://youtu.be/22K1I6Pc_hE)
 
 
 ---
