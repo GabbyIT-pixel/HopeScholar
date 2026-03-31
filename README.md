@@ -95,7 +95,7 @@ open index.html          # or: npx serve .
 ## Deployment
 
 ### Live Application
-**URL:** [https://www.www.gabrielmugisha.tech](https://www.www.gabrielmugisha.tech)
+**URL:**  https://www.gabrielmugisha.tech
 
 The application is deployed on Web01 and Web02 servers with a load balancer (Lb01) distributing traffic between them.
 
