@@ -30,8 +30,8 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/
 
-# Copy static files
-COPY . .
+# Copy static files to nginx web root
+COPY . /usr/share/nginx/html/
 
 # Create cache directory for nginx
 RUN mkdir -p /var/cache/nginx/client_temp
