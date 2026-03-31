@@ -2,7 +2,7 @@
 
 ### _Connecting talented African students to fully funded education worldwide_
 
-> Live at **[www.gabrielmugisha.tech](https://gabrielmugisha.tech)**
+> Live at **[www.www.www.gabrielmugisha.tech](https://www.www.gabrielmugisha.tech)**
 
 **Author:** Gabriel Mugisha | African Leadership University (ALU) | Software Engineering
 **GitHub:** https://github.com/GabbyIT-pixel | **Email:** g.mugisha4@alustudent.com
@@ -95,7 +95,7 @@ open index.html          # or: npx serve .
 ## Deployment
 
 ### Live Application
-**URL:** [https://gabrielmugisha.tech](https://gabrielmugisha.tech)
+**URL:** [https://www.www.gabrielmugisha.tech](https://www.www.gabrielmugisha.tech)
 
 The application is deployed on Web01 and Web02 servers with a load balancer (Lb01) distributing traffic between them.
 
@@ -184,7 +184,7 @@ ssh -i $SSH_KEY ubuntu@98.81.221.12
 sudo apt update && sudo apt install -y nginx certbot python3-certbot-nginx
 ```
 
-**Load Balancer Nginx Configuration (`/etc/nginx/sites-available/gabrielmugisha.tech`):**
+**Load Balancer Nginx Configuration (`/etc/nginx/sites-available/www.www.gabrielmugisha.tech`):**
 ```nginx
 # Upstream block for load balancing
 upstream hopescholar_backend {
@@ -195,18 +195,18 @@ upstream hopescholar_backend {
 # HTTP redirect to HTTPS
 server {
     listen 80;
-    server_name gabrielmugisha.tech www.gabrielmugisha.tech;
+    server_name www.www.gabrielmugisha.tech www.www.www.gabrielmugisha.tech;
     return 301 https://$server_name$request_uri;
 }
 
 # HTTPS server with load balancing
 server {
     listen 443 ssl http2;
-    server_name gabrielmugisha.tech www.gabrielmugisha.tech;
+    server_name www.www.gabrielmugisha.tech www.www.www.gabrielmugisha.tech;
     
     # SSL certificates from Let's Encrypt
-    ssl_certificate /etc/letsencrypt/live/gabrielmugisha.tech/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/gabrielmugisha.tech/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/www.www.gabrielmugisha.tech/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/www.www.gabrielmugisha.tech/privkey.pem;
     
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -239,13 +239,13 @@ server {
 
 **Install SSL Certificate:**
 ```bash
-sudo certbot --nginx -d gabrielmugisha.tech -d www.gabrielmugisha.tech
+sudo certbot --nginx -d www.www.gabrielmugisha.tech -d www.www.www.gabrielmugisha.tech
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
 #### 4. DNS Configuration
-- A Record: `gabrielmugisha.tech` → `98.81.221.12` (Load Balancer IP)
-- A Record: `www.gabrielmugisha.tech` → `98.81.221.12`
+- A Record: `www.www.gabrielmugisha.tech` → `98.81.221.12` (Load Balancer IP)
+- A Record: `www.www.www.gabrielmugisha.tech` → `98.81.221.12`
 
 ### Load Balancer Features
 | Feature | Implementation |
@@ -267,18 +267,18 @@ curl -I http://3.83.142.166/health
 # Output: HTTP/1.1 200 OK, X-Served-By: 6983-web-02
 
 # Test via load balancer (round-robin)
-curl -s https://gabrielmugisha.tech/health
+curl -s https://www.www.gabrielmugisha.tech/health
 # Output: OK
 
 # Verify SSL
-curl -I https://gabrielmugisha.tech
+curl -I https://www.www.gabrielmugisha.tech
 # Output: HTTP/2 200, SSL verified
 ```
 
 ### Load Balancer Testing Results
 ```bash
 # Multiple requests show traffic distribution
-curl -s https://gabrielmugisha.tech/ | grep -i "served-by"
+curl -s https://www.www.gabrielmugisha.tech/ | grep -i "served-by"
 # Alternates between 6983-web-01 and 6983-web-02
 ```
 
@@ -319,7 +319,7 @@ Configure secrets in GitHub repository for automatic deployment:
 | **API Rate Limiting** | The Hipolabs Universities API has rate limits. Implemented **client-side caching** in `cache.js` with 1-hour TTL to reduce API calls and improve performance. |
 | **SSL Certificate Management** | Configuring HTTPS for multiple servers was complex. Solved by terminating SSL at the **load balancer** (Lb01) using Let's Encrypt, while Web01/Web02 use HTTP internally. |
 | **Server Synchronization** | Keeping Web01 and Web02 in sync during deployment. Solved using **Docker containerization** and **GitHub Actions CI/CD pipeline** for automated, consistent deployments. |
-| **IP Address vs Domain Access** | When accessing via IP address (`98.81.221.12`), SSL certificate validation failed because the cert is issued for `gabrielmugisha.tech`. This is expected behavior - **always use the domain name for HTTPS**. |
+| **IP Address vs Domain Access** | When accessing via IP address (`98.81.221.12`), SSL certificate validation failed because the cert is issued for `www.www.gabrielmugisha.tech`. This is expected behavior - **always use the domain name for HTTPS**. |
 
 ---
 
