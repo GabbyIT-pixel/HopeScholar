@@ -1,0 +1,84 @@
+# Docker Compose Configuration
+
+version: "3.8"
+
+services:
+  # Web Server 01
+  web01:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: hopescholar-web01
+    ports:
+      - "8081:80"
+    environment:
+      - NODE_ENV=production
+      - SERVER_ID=web01
+    labels:
+      - "app=hopescholar"
+      - "tier=frontend"
+      - "server=web01"
+    networks:
+      - hopescholar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Web Server 02
+  web02:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: hopescholar-web02
+    ports:
+      - "8082:80"
+    environment:
+      - NODE_ENV=production
+      - SERVER_ID=web02
+    labels:
+      - "app=hopescholar"
+      - "tier=frontend"
+      - "server=web02"
+    networks:
+      - hopescholar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Load Balancer (Nginx)
+  loadbalancer:
+    image: nginx:alpine
+    container_name: hopescholar-lb
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-loadbalancer.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      web01:
+        condition: service_healthy
+      web02:
+        condition: service_healthy
+    networks:
+      - hopescholar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+networks:
+  hopescholar-network:
+    driver: bridge
+    name: hopescholar-network

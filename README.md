@@ -2,7 +2,7 @@
 
 ### _Connecting talented African students to fully funded education worldwide_
 
-> Live at **[gabrielmugisha.tech](https://gabrielmugisha.tech)**
+> Live at **[www.gabrielmugisha.tech](https://gabrielmugisha.tech)**
 
 **Author:** Gabriel Mugisha | African Leadership University (ALU) | Software Engineering
 **GitHub:** https://github.com/GabbyIT-pixel | **Email:** g.mugisha4@alustudent.com
@@ -98,7 +98,7 @@ The application is deployed on Web01 and Web02 servers with a load balancer (Lb0
 
 #### 1. Web01 Server (`54.227.215.118`)
 ```bash
-ssh -i ~/.ssh/school ubuntu@54.227.215.118
+ssh -i $SSH_KEY ubuntu@54.227.215.118
 sudo apt update && sudo apt install -y nginx
 sudo mkdir -p /var/www/hopescholar
 
@@ -137,9 +137,9 @@ sudo rm /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-#### 2. Web02 Server (`100.25.136.154`)
+#### 2. Web02 Server (`3.83.142.166`)
 ```bash
-ssh -i ~/.ssh/school ubuntu@100.25.136.154
+ssh -i $SSH_KEY ubuntu@3.83.142.166
 sudo apt update && sudo apt install -y nginx
 sudo mkdir -p /var/www/hopescholar
 cp -r * /var/www/hopescholar/
@@ -173,9 +173,9 @@ sudo rm /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-#### 3. Load Balancer - Lb01 (`54.237.217.61`)
+#### 3. Load Balancer - Lb01 (`98.81.221.12`)
 ```bash
-ssh -i ~/.ssh/school ubuntu@54.237.217.61
+ssh -i $SSH_KEY ubuntu@98.81.221.12
 sudo apt update && sudo apt install -y nginx certbot python3-certbot-nginx
 ```
 
@@ -184,7 +184,7 @@ sudo apt update && sudo apt install -y nginx certbot python3-certbot-nginx
 # Upstream block for load balancing
 upstream hopescholar_backend {
     server 54.227.215.118:80 weight=1;
-    server 100.25.136.154:80 weight=1;
+    server 3.83.142.166:80 weight=1;
 }
 
 # HTTP redirect to HTTPS
@@ -239,14 +239,14 @@ sudo nginx -t && sudo systemctl reload nginx
 ```
 
 #### 4. DNS Configuration
-- A Record: `gabrielmugisha.tech` → `54.237.217.61` (Load Balancer IP)
-- A Record: `www.gabrielmugisha.tech` → `54.237.217.61`
+- A Record: `gabrielmugisha.tech` → `98.81.221.12` (Load Balancer IP)
+- A Record: `www.gabrielmugisha.tech` → `98.81.221.12`
 
 ### Load Balancer Features
 | Feature | Implementation |
 |---------|---------------|
 | **Algorithm** | Round-robin (equal weights) |
-| **Backend Servers** | Web01 (54.227.215.118), Web02 (100.25.136.154) |
+| **Backend Servers** | Web01 (54.227.215.118), Web02 (3.83.142.166) |
 | **SSL** | Let's Encrypt with auto-renewal |
 | **Security Headers** | HSTS, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection |
 | **Health Checks** | `/health` endpoint returns 200 OK |
@@ -258,7 +258,7 @@ curl -I http://54.227.215.118/health
 # Output: HTTP/1.1 200 OK, X-Served-By: 6983-web-01
 
 # Test Web02 directly  
-curl -I http://100.25.136.154/health
+curl -I http://3.83.142.166/health
 # Output: HTTP/1.1 200 OK, X-Served-By: 6983-web-02
 
 # Test via load balancer (round-robin)
@@ -383,3 +383,4 @@ All API responses are sanitized before DOM insertion to prevent XSS attacks.
 
 _African Leadership University · Web Infrastructure & APIs Assignment · 2025_
 _Credit: Hipo Labs · REST Countries · RSS2JSON · Mastercard Foundation · Plus Jakarta Sans_
+

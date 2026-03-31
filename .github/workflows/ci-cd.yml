@@ -1,0 +1,201 @@
+# CI/CD Pipeline
+
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+env:
+  NODE_VERSION: '20'
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  # ============== Lint and Test ==============
+  lint-and-test:
+    name: Lint & Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run HTML validation
+        run: |
+          echo "Checking HTML files for syntax issues..."
+          for file in $(find . -name "*.html" -type f); do
+            echo "Validating: $file"
+            # Basic HTML structure check
+            if grep -q "<!DOCTYPE html>" "$file" || grep -q "<html" "$file"; then
+              echo "✓ $file has valid HTML structure"
+            else
+              echo "✗ $file missing HTML structure"
+              exit 1
+            fi
+          done
+
+      - name: Run JavaScript linting
+        run: |
+          echo "Checking JavaScript files..."
+          for file in $(find js -name "*.js" -type f); do
+            # Check for strict mode
+            if grep -q '"use strict"' "$file"; then
+              echo "✓ $file uses strict mode"
+            fi
+          done
+
+      - name: Security audit
+        run: |
+          echo "Running basic security checks..."
+          # Check for exposed API keys (should not exist in main files)
+          if grep -r "apiKey" js/ --include="*.js" | grep -v "// API" | grep -v "/\*"; then
+            echo "⚠ Warning: Potential API key exposure detected"
+          fi
+
+      - name: Validate Docker files
+        run: |
+          echo "Validating Dockerfile..."
+          if [ -f Dockerfile ]; then
+            echo "✓ Dockerfile exists"
+          fi
+          if [ -f docker-compose.yml ]; then
+            echo "✓ docker-compose.yml exists"
+          fi
+
+  # ============== Build Docker Images ==============
+  build-docker:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build development image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: hopescholar:dev
+          target: development
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Build production image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: hopescholar:prod
+          target: production
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Run Docker container
+        run: |
+          docker run -d --name test-container -p 3333:80 hopescholar:prod
+          sleep 5
+          curl -f http://localhost:3333 || exit 1
+          docker stop test-container
+
+      - name: Update cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  # ============== Deploy to Staging ==============
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build-docker
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to staging server
+        run: |
+          echo "Deploying to staging server..."
+          # Placeholder for actual deployment commands
+          # In production, you would use SSH or deployment tools
+          echo "Staging deployment would happen here"
+          echo "Server: staging.www.gabrielmugisha.tech"
+
+  # ============== Deploy to Production ==============
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build-docker
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and push to registry
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/hopescholar:latest
+            ghcr.io/${{ github.repository }}/hopescholar:${{ github.sha }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Deploy to production servers
+        run: |
+          echo "Deploying to production servers..."
+          echo "Server 1: web01.www.gabrielmugisha.tech"
+          echo "Server 2: web02.www.gabrielmugisha.tech"
+          echo "Load Balancer: www.gabrielmugisha.tech"
+          
+          # Placeholder for actual deployment via SSH
+          # Example: scp -r ./dist user@web01:/var/www/
+
+  # ============== Generate Reports ==============
+  generate-report:
+    name: Generate Deployment Report
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, build-docker]
+    if: always()
+    
+    steps:
+      - name: Generate report
+        run: |
+          echo "## HopeScholar CI/CD Report" > report.md
+          echo "" >> report.md
+          echo "**Date:** $(date)" >> report.md
+          echo "**Commit:** ${{ github.sha }}" >> report.md
+          echo "**Branch:** ${{ github.ref }}" >> report.md
+          echo "" >> report.md
+          echo "### Job Status" >> report.md
+          echo "- Lint & Test: ${{ needs.lint-and-test.result }}" >> report.md
+          echo "- Build Docker: ${{ needs.build-docker.result }}" >> report.md
+          
+          cat report.md
