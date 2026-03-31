@@ -386,6 +386,6 @@ All API responses are sanitized before DOM insertion to prevent XSS attacks.
 
 ---
 
-_African Leadership University · Web Infrastructure & APIs Assignment · 2025_
+_African Leadership University · Web Infrastructure & APIs Assignment · 
 _Credit: Hipo Labs · REST Countries · RSS2JSON · Mastercard Foundation · Plus Jakarta Sans_
 
