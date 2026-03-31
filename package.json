@@ -1,0 +1,17 @@
+{
+  "name": "hopescholar",
+  "version": "1.0.0",
+  "description": "HopeScholar - Scholarship Finder Platform",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "scholarship",
+    "education",
+    "finder"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {}
+}
